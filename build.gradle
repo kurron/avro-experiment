@@ -32,6 +32,7 @@ repositories {
 dependencies {
     compile("org.springframework.boot:spring-boot-starter")
     compile("org.codehaus.groovy:groovy")
+    compile("org.apache.avro:avro:1.7.7")
     testCompile("org.springframework.boot:spring-boot-starter-test") 
 }
 
