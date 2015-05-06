@@ -33,24 +33,24 @@ class LearningTest extends Specification {
         user2.put( 'favorite_color', 'red' )
 
         and: 'encoded records to disk'
-        File file = new File( 'build/users.avro' )
-        DatumWriter<GenericRecord> datumWriter = new GenericDatumWriter<GenericRecord>( schema )
-        DataFileWriter<GenericRecord> dataFileWriter = new DataFileWriter<GenericRecord>( datumWriter )
+        def file = new File( 'build/users.avro' )
+        def datumWriter = new GenericDatumWriter<GenericRecord>( schema )
+        def dataFileWriter = new DataFileWriter<GenericRecord>( datumWriter )
         dataFileWriter.create( schema, file )
         dataFileWriter.append( user1 )
         dataFileWriter.append( user2 )
         dataFileWriter.close()
 
         when: 'the records are decoded'
-        DatumReader<GenericRecord> datumReader = new GenericDatumReader<GenericRecord>( schema )
-        DataFileReader<GenericRecord> dataFileReader = new DataFileReader<GenericRecord>( file, datumReader )
+        def datumReader = new GenericDatumReader<GenericRecord>( schema )
+        def dataFileReader = new DataFileReader<GenericRecord>( file, datumReader )
         GenericRecord user = null;
         while ( dataFileReader.hasNext() ) {
             // Reuse user object by passing it to next(). This saves us from
             // allocating and garbage collecting many objects for files with
             // many items.
             user = dataFileReader.next( user )
-            System.out.println( user )
+            println( user )
         }
 
         then: 'something'
