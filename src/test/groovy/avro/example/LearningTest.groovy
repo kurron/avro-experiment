@@ -16,18 +16,18 @@ import spock.lang.Specification
  */
 class LearningTest extends Specification {
 
-    def 'exercise codec'() {
+    def 'exercise codec without using generated code'() {
 
         given: 'a parsed schema'
         def schema = new Schema.Parser().parse( getClass().classLoader.getResourceAsStream( 'user.avsc' ) )
 
         and: 'some records'
-        GenericRecord user1 = new GenericData.Record( schema )
+        def user1 = new GenericData.Record( schema )
         user1.put( 'name', 'Alyssa' )
         user1.put( 'favorite_number', 256)
         // Leave favorite color null
 
-        GenericRecord user2 = new GenericData.Record( schema )
+        def user2 = new GenericData.Record( schema )
         user2.put( 'name', 'Ben' )
         user2.put( 'favorite_number', 7 )
         user2.put( 'favorite_color', 'red' )
