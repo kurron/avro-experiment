@@ -48,20 +48,22 @@ class LearningTest extends Specification {
         toEncode.each {
             dataFileWriter.append( it )
         }
+        dataFileWriter.flush()
         dataFileWriter.close()
 
         when: 'the records are decoded'
         def datumReader = new GenericDatumReader<GenericRecord>( schema )
         def dataFileReader = new DataFileReader<GenericRecord>( file, datumReader )
-        GenericRecord user = null;
+        List<GenericRecord> decoded = []
         while ( dataFileReader.hasNext() ) {
-            // Reuse user object by passing it to next(). This saves us from
-            // allocating and garbage collecting many objects for files with
-            // many items.
-            user = dataFileReader.next( user )
-            println( user )
+            decoded << dataFileReader.next()
         }
+        dataFileReader.close()
 
         then: 'something'
+        toEncode.size() == decoded.size()
+        decoded.each {
+            println( it )
+        }
     }
 }
