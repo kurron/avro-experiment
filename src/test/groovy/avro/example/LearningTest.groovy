@@ -11,10 +11,18 @@ import org.apache.avro.io.DatumReader
 import org.apache.avro.io.DatumWriter
 import spock.lang.Specification
 
+import java.security.SecureRandom
+
 /**
  * A learning test of the Avro library.
  */
 class LearningTest extends Specification {
+
+    def generator = new SecureRandom()
+
+    String randomHexString() {
+        Integer.toHexString( generator.nextInt( Integer.MAX_VALUE ) ).toUpperCase()
+    }
 
     def 'exercise codec without using generated code'() {
 
@@ -22,23 +30,24 @@ class LearningTest extends Specification {
         def schema = new Schema.Parser().parse( getClass().classLoader.getResourceAsStream( 'user.avsc' ) )
 
         and: 'some records'
-        def user1 = new GenericData.Record( schema )
-        user1.put( 'name', 'Alyssa' )
-        user1.put( 'favorite_number', 256)
-        // Leave favorite color null
+        def toEncode = (1..10).collect {
+            def record = new GenericData.Record( schema )
+            record.put( 'name', randomHexString() )
+            record.put( 'favorite_number', generator.nextInt() )
+            if ( generator.nextBoolean() ) {
+                record.put( 'favorite_color', randomHexString() )
+            }
+            record
+        }
 
-        def user2 = new GenericData.Record( schema )
-        user2.put( 'name', 'Ben' )
-        user2.put( 'favorite_number', 7 )
-        user2.put( 'favorite_color', 'red' )
-
-        and: 'encoded records to disk'
+        and: 'records are encoded to disk'
         def file = new File( 'build/users.avro' )
         def datumWriter = new GenericDatumWriter<GenericRecord>( schema )
         def dataFileWriter = new DataFileWriter<GenericRecord>( datumWriter )
         dataFileWriter.create( schema, file )
-        dataFileWriter.append( user1 )
-        dataFileWriter.append( user2 )
+        toEncode.each {
+            dataFileWriter.append( it )
+        }
         dataFileWriter.close()
 
         when: 'the records are decoded'
