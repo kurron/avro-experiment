@@ -1,6 +1,9 @@
-{"namespace": "avro.example",
+{
  "type": "record",
  "name": "User",
+ "namespace": "avro.example",
+ "doc": "http://docs.example.com/",
+ "aliases": ["Logan", "Devan"],
  "fields": [
      {"name": "nullValue", "type": "null"},
      {"name": "booleanValue", "type": "boolean"},
