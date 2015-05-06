@@ -2,8 +2,13 @@
  "type": "record",
  "name": "User",
  "fields": [
-     {"name": "name", "type": "string"},
-     {"name": "favorite_number",  "type": ["int", "null"]},
-     {"name": "favorite_color", "type": ["string", "null"]}
+     {"name": "nullValue", "type": "null"},
+     {"name": "booleanValue", "type": "boolean"},
+     {"name": "intValue", "type": "int"},
+     {"name": "longValue", "type": "long"},
+     {"name": "floatValue", "type": "float"},
+     {"name": "doubleValue", "type": "double"},
+     {"name": "byteValue", "type": "bytes"},
+     {"name": "stringValue", "type": "string"}
  ]
 }

@@ -9,6 +9,7 @@ import org.apache.avro.generic.GenericDatumWriter
 import org.apache.avro.generic.GenericRecord
 import spock.lang.Specification
 
+import java.nio.ByteBuffer
 import java.security.SecureRandom
 
 /**
@@ -30,14 +31,16 @@ class LearningTest extends Specification {
         and: 'some records'
         def toEncode = (1..20).collect {
             def record = new GenericData.Record( schema )
-            record.put( 'name', randomHexString() )
-            int number = generator.nextInt()
-            if ( 0 == number % 2 ) {
-                record.put( 'favorite_number', number )
-            }
-            if ( generator.nextBoolean() ) {
-                record.put( 'favorite_color', randomHexString() )
-            }
+            record.put( 'nullValue', randomHexString() )
+            record.put( 'booleanValue', generator.nextBoolean() )
+            record.put( 'intValue', generator.nextInt() )
+            record.put( 'longValue', generator.nextLong() )
+            record.put( 'floatValue', generator.nextFloat() )
+            record.put( 'doubleValue', generator.nextDouble() )
+            byte[] buffer = new byte[2]
+            generator.nextBytes( buffer )
+            record.put( 'byteValue', ByteBuffer.wrap( buffer ) )
+            record.put( 'stringValue', randomHexString() )
             record
         }
 
@@ -53,6 +56,7 @@ class LearningTest extends Specification {
         dataFileWriter.close()
 
         when: 'the records are decoded'
+        //TODO: can we write to something other than disk?
         def datumReader = new GenericDatumReader<GenericRecord>( schema )
         def dataFileReader = new DataFileReader<GenericRecord>( file, datumReader )
         List<GenericRecord> decoded = []
