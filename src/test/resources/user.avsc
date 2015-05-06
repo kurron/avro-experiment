@@ -5,13 +5,13 @@
  "doc": "http://docs.example.com/",
  "aliases": ["Logan", "Devan"],
  "fields": [
-     {"name": "nullValue", "type": "null"},
-     {"name": "booleanValue", "type": "boolean"},
-     {"name": "intValue", "type": "int"},
-     {"name": "longValue", "type": "long"},
-     {"name": "floatValue", "type": "float"},
-     {"name": "doubleValue", "type": "double"},
-     {"name": "byteValue", "type": "bytes"},
-     {"name": "stringValue", "type": "string"}
+     {"name": "nullValue", "type": "null", "doc": "some-pointer", "default": null },
+     {"name": "booleanValue", "type": "boolean", "doc": "some-pointer", "default": true },
+     {"name": "intValue", "type": "int", "doc": "some-pointer", "default": 10 },
+     {"name": "longValue", "type": "long", "doc": "some-pointer", "default": 100 },
+     {"name": "floatValue", "type": "float", "doc": "some-pointer", "default": 1.0 },
+     {"name": "doubleValue", "type": "double", "doc": "some-pointer", "default": 2.0 },
+     {"name": "byteValue", "type": "bytes", "doc": "some-pointer", "default": "\uFFFF" },
+     {"name": "stringValue", "type": "string", "doc": "some-pointer", "default": "Zuul" }
  ]
 }
