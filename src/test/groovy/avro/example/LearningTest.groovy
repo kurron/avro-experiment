@@ -7,8 +7,6 @@ import org.apache.avro.generic.GenericData
 import org.apache.avro.generic.GenericDatumReader
 import org.apache.avro.generic.GenericDatumWriter
 import org.apache.avro.generic.GenericRecord
-import org.apache.avro.io.DatumReader
-import org.apache.avro.io.DatumWriter
 import spock.lang.Specification
 
 import java.security.SecureRandom
@@ -30,10 +28,13 @@ class LearningTest extends Specification {
         def schema = new Schema.Parser().parse( getClass().classLoader.getResourceAsStream( 'user.avsc' ) )
 
         and: 'some records'
-        def toEncode = (1..10).collect {
+        def toEncode = (1..20).collect {
             def record = new GenericData.Record( schema )
             record.put( 'name', randomHexString() )
-            record.put( 'favorite_number', generator.nextInt() )
+            int number = generator.nextInt()
+            if ( 0 == number % 2 ) {
+                record.put( 'favorite_number', number )
+            }
             if ( generator.nextBoolean() ) {
                 record.put( 'favorite_color', randomHexString() )
             }
