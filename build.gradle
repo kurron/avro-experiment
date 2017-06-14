@@ -28,6 +28,7 @@ dependencies {
     compile("org.springframework.boot:spring-boot-starter")
     compile("org.codehaus.groovy:groovy")
     compile("org.apache.avro:avro:1.8.2")
+    compile 'com.fasterxml.jackson.dataformat:jackson-dataformat-avro:2.8.9'
     testCompile("org.springframework.boot:spring-boot-starter-test")
     testCompile( "org.spockframework:spock-spring:1.1-groovy-2.4" ) {
         exclude module: 'groovy-all'
