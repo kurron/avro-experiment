@@ -7,6 +7,7 @@ import org.apache.avro.generic.GenericData
 import org.apache.avro.generic.GenericDatumReader
 import org.apache.avro.generic.GenericDatumWriter
 import org.apache.avro.generic.GenericRecord
+import org.springframework.boot.test.context.SpringBootTest
 import spock.lang.Specification
 
 import java.nio.ByteBuffer
@@ -15,6 +16,7 @@ import java.security.SecureRandom
 /**
  * A learning test of the Avro library.
  */
+@SpringBootTest
 class LearningTest extends Specification {
 
     def generator = new SecureRandom()
