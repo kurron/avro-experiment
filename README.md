@@ -10,7 +10,7 @@ each message is associated with a schema that allows the Avro runtime to
 make decisions about how to convert a payload into an object that the application
 understands.
 
-In our test scenario we will have two applications, one the produces the
+In our test scenario we will have two applications, one that produces the
 messages and one that consumes them.  In theory, both applications should be
 using the same message structure but in practice, that rarely happens.  The
 applications get updated and released on their own schedules so it is important

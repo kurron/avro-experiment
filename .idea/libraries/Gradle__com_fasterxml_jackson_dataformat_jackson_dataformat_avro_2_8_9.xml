@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="Gradle: com.fasterxml.jackson.dataformat:jackson-dataformat-avro:2.8.9">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.fasterxml.jackson.dataformat/jackson-dataformat-avro/2.8.9/2a568a0cfa5ac0589f46533923be1030f322cd34/jackson-dataformat-avro-2.8.9.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.fasterxml.jackson.dataformat/jackson-dataformat-avro/2.8.9/ad818c0d3545ab9b9a0400bd77c34ac0e70c799c/jackson-dataformat-avro-2.8.9-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>
