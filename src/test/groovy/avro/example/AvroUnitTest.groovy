@@ -44,6 +44,15 @@ class AvroUnitTest extends Specification {
         new User110( name: randomString(), username: randomString() )
     }
 
+    static def v100tov100Expectation = { User100 writer, User100 reader ->
+        writer.name == reader.name
+    }
+
+    static def v110tov100Expectation = { User110 writer, User100 reader ->
+        writer.name == reader.name
+        // reader doesn't care about username yet
+    }
+
     @Unroll
     void 'writing #writerSchemaFile and reading #readerSchemaFile'() {
 
@@ -64,11 +73,11 @@ class AvroUnitTest extends Specification {
         def decoded = mapper.readerFor( readerType ).with( readerSchema ).readValue( encoded )
 
         then: 'encoded and decoded match'
-        decoded == original
+        expectation.call( original, decoded )
 
         where:
-        writerSchemaFile          | readerSchemaFile          | writerClosure | readerType
-        'schemas/user-1.0.0.json' | 'schemas/user-1.0.0.json' | v100Builder   | User100.class
-        'schemas/user-1.1.0.json' | 'schemas/user-1.0.0.json' | v110Builder   | User100.class
+        writerSchemaFile          | readerSchemaFile          | writerClosure | readerType    || expectation
+        'schemas/user-1.0.0.json' | 'schemas/user-1.0.0.json' | v100Builder   | User100.class || v100tov100Expectation
+        'schemas/user-1.1.0.json' | 'schemas/user-1.0.0.json' | v110Builder   | User100.class || v110tov100Expectation
     }
 }
