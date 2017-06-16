@@ -53,6 +53,10 @@ class AvroUnitTest extends Specification {
         // reader doesn't care about username yet
     }
 
+    static def v100tov110Expectation = { User100 writer, User110 reader ->
+        (writer.name == reader.name) && ('foo' == reader.username)
+    }
+
     @Unroll
     void '#description'() {
 
@@ -79,5 +83,6 @@ class AvroUnitTest extends Specification {
         writerSchemaFile          | readerSchemaFile          | writerClosure | readerType    | description                    || expectation
         'schemas/user-1.0.0.json' | 'schemas/user-1.0.0.json' | v100Builder   | User100.class | 'Reader matches writer'        || v100tov100Expectation
         'schemas/user-1.1.0.json' | 'schemas/user-1.0.0.json' | v110Builder   | User100.class | 'Writer adds additional field' || v110tov100Expectation
+        'schemas/user-1.0.0.json' | 'schemas/user-1.1.0.json' | v100Builder   | User110.class | 'Reader adds additional field' || v100tov110Expectation
     }
 }
