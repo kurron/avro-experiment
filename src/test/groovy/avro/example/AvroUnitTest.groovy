@@ -29,6 +29,10 @@ class AvroUnitTest extends Specification {
         new AvroSchema( raw )
     }
 
+    static def v100Builder = {
+        new User100( name: randomString() )
+    }
+
     void 'exercise various codec scenarios'() {
 
         given: 'a reader schema'
@@ -41,7 +45,7 @@ class AvroUnitTest extends Specification {
         def readerSchema = loadSchema( readerSchemaFile )
 
         and: 'an encoded instance'
-        def original = new User100( name: randomString() )
+        def original = writerClosure.call()
         byte[] encoded = mapper.writer( writerSchema ).writeValueAsBytes( original )
 
         when: 'the instance are recreated'
@@ -51,7 +55,7 @@ class AvroUnitTest extends Specification {
         decoded == original
 
         where:
-        writerSchemaFile          | readerSchemaFile          | writerType    | readerType
-        'schemas/user-1.0.0.json' | 'schemas/user-1.0.0.json' | User100.class | User100.class
+        writerSchemaFile          | readerSchemaFile          | writerClosure | readerType
+        'schemas/user-1.0.0.json' | 'schemas/user-1.0.0.json' | v100Builder   | User100.class
     }
 }
