@@ -35,7 +35,7 @@ class AvroUnitTest extends Specification {
 
     void 'exercise various codec scenarios'() {
 
-        given: 'a reader schema'
+        given: 'a writer schema'
         def writerSchema = loadSchema( writerSchemaFile )
 
         and: 'a mapper'
@@ -48,7 +48,7 @@ class AvroUnitTest extends Specification {
         def original = writerClosure.call()
         byte[] encoded = mapper.writer( writerSchema ).writeValueAsBytes( original )
 
-        when: 'the instance are recreated'
+        when: 'the instance is decoded'
         def decoded = mapper.readerFor( readerType ).with( readerSchema ).readValue( encoded )
 
         then: 'encoded and decoded match'
