@@ -21,6 +21,10 @@ targetCompatibility = 1.8
 
 repositories {
     jcenter()
+
+    maven {
+        url " http://dl.bintray.com/kurron/maven"
+    }
 }
 
 
@@ -30,7 +34,7 @@ dependencies {
     compile("org.apache.avro:avro:1.8.2")
     compile 'com.fasterxml.jackson.dataformat:jackson-dataformat-avro:2.8.9'
     testCompile("org.springframework.boot:spring-boot-starter-test")
-    testCompile( "org.kurron:tools-groovy:1.5.0.RELEASE" ) {
+    testCompile( "org.kurron:tools-groovy:1.6.3.RELEASE" ) {
         exclude module: 'groovy-all'
     }
     testCompile( "org.spockframework:spock-spring:1.1-groovy-2.4" ) {

@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="Gradle: org.kurron:tools-java:1.5.4.RELEASE">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.kurron/tools-java/1.5.4.RELEASE/9aec6275e71810437ea4911dca2d63a063cc5e9e/tools-java-1.5.4.RELEASE.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.kurron/tools-java/1.5.4.RELEASE/cfbf7fb8f9a43e3c74931643ef14667e8c98fd4f/tools-java-1.5.4.RELEASE-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>
