@@ -54,7 +54,7 @@ class AvroUnitTest extends Specification {
     }
 
     @Unroll
-    void 'writing #writerSchemaFile and reading #readerSchemaFile'() {
+    void '#description'() {
 
         given: 'a writer schema'
         def writerSchema = loadSchema( writerSchemaFile )
@@ -76,8 +76,8 @@ class AvroUnitTest extends Specification {
         expectation.call( original, decoded )
 
         where:
-        writerSchemaFile          | readerSchemaFile          | writerClosure | readerType    || expectation
-        'schemas/user-1.0.0.json' | 'schemas/user-1.0.0.json' | v100Builder   | User100.class || v100tov100Expectation
-        'schemas/user-1.1.0.json' | 'schemas/user-1.0.0.json' | v110Builder   | User100.class || v110tov100Expectation
+        writerSchemaFile          | readerSchemaFile          | writerClosure | readerType    | description                    || expectation
+        'schemas/user-1.0.0.json' | 'schemas/user-1.0.0.json' | v100Builder   | User100.class | 'Reader matches writer'        || v100tov100Expectation
+        'schemas/user-1.1.0.json' | 'schemas/user-1.0.0.json' | v110Builder   | User100.class | 'Writer adds additional field' || v110tov100Expectation
     }
 }
