@@ -19,6 +19,12 @@ class AvroUnitTest extends Specification {
         String name
     }
 
+    @Canonical
+    static class User110 {
+        String name
+        String username
+    }
+
     static String randomString() {
         Integer.toHexString( ThreadLocalRandom.current().nextInt( 0, Integer.MAX_VALUE ) )
     }
@@ -33,7 +39,11 @@ class AvroUnitTest extends Specification {
         new User100( name: randomString() )
     }
 
-    void 'exercise various codec scenarios'() {
+    static def v110Builder = {
+        new User110( name: randomString(), username: randomString() )
+    }
+
+    void 'writing #writerSchemaFile and reading #readerSchemaFile'() {
 
         given: 'a writer schema'
         def writerSchema = loadSchema( writerSchemaFile )
@@ -57,5 +67,6 @@ class AvroUnitTest extends Specification {
         where:
         writerSchemaFile          | readerSchemaFile          | writerClosure | readerType
         'schemas/user-1.0.0.json' | 'schemas/user-1.0.0.json' | v100Builder   | User100.class
+        'schemas/user-1.1.0.json' | 'schemas/user-1.0.0.json' | v110Builder   | User100.class
     }
 }

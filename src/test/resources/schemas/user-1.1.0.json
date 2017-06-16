@@ -1,0 +1,25 @@
+{
+  "type": "record",
+  "namespace": "kurron",
+  "name": "user",
+  "doc": "structure representing a user in the system",
+  "aliases": ["User"],
+  "fields": [
+    {
+      "name": "name",
+      "type": "string",
+      "default": "unknown",
+      "order": "ascending",
+      "aliases": ["Name"],
+      "doc": "the user's real world name"
+    },
+    {
+      "name": "username",
+      "type": "string",
+      "default": "unknown",
+      "order": "ascending",
+      "aliases": ["Username"],
+      "doc": "the user's system login"
+    }
+  ]
+}
