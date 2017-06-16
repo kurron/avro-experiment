@@ -19,23 +19,39 @@ class AvroUnitTest extends Specification {
         String name
     }
 
-    void 'exercise Jackson Avro support'() {
+    static String randomString() {
+        Integer.toHexString( ThreadLocalRandom.current().nextInt( 0, Integer.MAX_VALUE ) )
+    }
 
-        given: 'an Avro schema and mapper'
-        def schemaStream = AvroUnitTest.class.classLoader.getResourceAsStream( 'schemas/user-1.0.0.json' )
+    static AvroSchema loadSchema( String schemaFile ) {
+        def schemaStream = AvroUnitTest.class.classLoader.getResourceAsStream( schemaFile )
         def raw = new Schema.Parser().setValidate( true ).parse( schemaStream )
-        def schema = new AvroSchema( raw )
+        new AvroSchema( raw )
+    }
+
+    void 'exercise various codec scenarios'() {
+
+        given: 'a reader schema'
+        def writerSchema = loadSchema( writerSchemaFile )
+
+        and: 'a mapper'
         def mapper = new ObjectMapper( new AvroFactory() )
 
-        and: 'an Avro encoded instance'
-        def name = Integer.toHexString( ThreadLocalRandom.current().nextInt( 0, Integer.MAX_VALUE ) )
-        def original = new User100( name: name )
-        byte[] encoded = mapper.writer( schema ).writeValueAsBytes( original )
+        and: 'a reader schema'
+        def readerSchema = loadSchema( readerSchemaFile )
+
+        and: 'an encoded instance'
+        def original = new User100( name: randomString() )
+        byte[] encoded = mapper.writer( writerSchema ).writeValueAsBytes( original )
 
         when: 'the instance are recreated'
-        User100 decoded = mapper.readerFor( User100.class ).with( schema ).readValue( encoded )
+        User100 decoded = mapper.readerFor( User100.class ).with( readerSchema ).readValue( encoded )
 
         then: 'encoded and decoded match'
         decoded == original
+
+        where:
+        writerSchemaFile          | readerSchemaFile          | writerType    | readerType
+        'schemas/user-1.0.0.json' | 'schemas/user-1.0.0.json' | User100.class | User100.class
     }
 }
