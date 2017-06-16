@@ -45,7 +45,7 @@ class AvroUnitTest extends Specification {
         byte[] encoded = mapper.writer( writerSchema ).writeValueAsBytes( original )
 
         when: 'the instance are recreated'
-        User100 decoded = mapper.readerFor( User100.class ).with( readerSchema ).readValue( encoded )
+        def decoded = mapper.readerFor( readerType ).with( readerSchema ).readValue( encoded )
 
         then: 'encoded and decoded match'
         decoded == original
