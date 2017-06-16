@@ -6,6 +6,7 @@ import com.fasterxml.jackson.dataformat.avro.AvroSchema
 import groovy.transform.Canonical
 import org.apache.avro.Schema
 import spock.lang.Specification
+import spock.lang.Unroll
 
 import java.util.concurrent.ThreadLocalRandom
 
@@ -43,6 +44,7 @@ class AvroUnitTest extends Specification {
         new User110( name: randomString(), username: randomString() )
     }
 
+    @Unroll
     void 'writing #writerSchemaFile and reading #readerSchemaFile'() {
 
         given: 'a writer schema'
