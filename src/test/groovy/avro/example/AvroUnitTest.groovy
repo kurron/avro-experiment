@@ -1,7 +1,6 @@
 package avro.example
 
-import com.fasterxml.jackson.databind.ObjectMapper
-import com.fasterxml.jackson.dataformat.avro.AvroFactory
+import com.fasterxml.jackson.dataformat.avro.AvroMapper
 import com.fasterxml.jackson.dataformat.avro.AvroSchema
 import groovy.transform.Canonical
 import org.apache.avro.Schema
@@ -11,7 +10,6 @@ import org.apache.avro.generic.GenericData
 import org.apache.avro.generic.GenericDatumReader
 import org.apache.avro.generic.GenericDatumWriter
 import org.apache.avro.generic.GenericRecord
-import spock.lang.Ignore
 import spock.lang.Specification
 import spock.lang.Unroll
 
@@ -69,15 +67,14 @@ class AvroUnitTest extends Specification {
         (writer.name == reader.name) && ('foo' == reader.username)
     }
 
-    @Ignore
-    @Unroll( '#description' )
+    @Unroll( 'Object-based: #description' )
     void 'exercise object-based'() {
 
         given: 'a writer schema'
         def writerSchema = loadJacksonSchema( writerSchemaFile )
 
         and: 'a mapper'
-        def mapper = new ObjectMapper( new AvroFactory() )
+        def mapper = new AvroMapper()
 
         and: 'a reader schema'
         def readerSchema = loadJacksonSchema( readerSchemaFile )
@@ -128,7 +125,7 @@ class AvroUnitTest extends Specification {
         reader.get( 'username' ) as String
     }
 
-    @Unroll( '#description' )
+    @Unroll( 'Map-based: #description' )
     void 'exercise map-based'() {
 
         given: 'a writer schema'
