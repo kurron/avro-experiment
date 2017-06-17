@@ -12,12 +12,6 @@
       "doc": "the user's real world first name"
     },
     {
-      "name": "lastname",
-      "type": "string",
-      "default": "unknown",
-      "doc": "the user's real world last name"
-    },
-    {
       "name": "username",
       "type": "string",
       "default": "unknown",

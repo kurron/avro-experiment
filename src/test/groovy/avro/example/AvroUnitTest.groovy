@@ -93,7 +93,6 @@ class AvroUnitTest extends Specification {
 
     static def v110tov120Expectation = { User110 writer, User120 reader ->
         (writer.name as String == reader.firstname as String) &&
-        (reader.lastname as String == 'unknown') &&
         (writer.username as String == reader.username as String)
     }
 
@@ -110,11 +109,11 @@ class AvroUnitTest extends Specification {
         expectation.call( written, read )
 
         where:
-        writerSchemaFile          | readerSchemaFile          | writerClosure | readerClosure | description                    || expectation
-        'schemas/user-1.0.0.json' | 'schemas/user-1.0.0.json' | v100Writer    | v100Reader    | 'Reader matches writer'        || v100tov100Expectation
-        'schemas/user-1.1.0.json' | 'schemas/user-1.0.0.json' | v110Writer    | v100Reader    | 'Writer adds additional field' || v110tov100Expectation
-        'schemas/user-1.0.0.json' | 'schemas/user-1.1.0.json' | v100Writer    | v110Reader    | 'Reader adds additional field' || v100tov110Expectation
-        'schemas/user-1.1.0.json' | 'schemas/user-1.2.0.json' | v110Writer    | v120Reader    | 'Reader splits field in two'   || v110tov120Expectation
+        writerSchemaFile          | readerSchemaFile          | writerClosure | readerClosure | description                                          || expectation
+        'schemas/user-1.0.0.json' | 'schemas/user-1.0.0.json' | v100Writer    | v100Reader    | 'Reader matches writer'                              || v100tov100Expectation
+        'schemas/user-1.1.0.json' | 'schemas/user-1.0.0.json' | v110Writer    | v100Reader    | 'Forwards Compatible: Writer adds additional field'  || v110tov100Expectation
+        'schemas/user-1.0.0.json' | 'schemas/user-1.1.0.json' | v100Writer    | v110Reader    | 'Backwards Compatible: Reader adds additional field' || v100tov110Expectation
+        'schemas/user-1.1.0.json' | 'schemas/user-1.2.0.json' | v110Writer    | v120Reader    | 'Backwards Compatible: Reader renames a field'       || v110tov120Expectation
     }
 
     static def v100MapBuilder = { Schema schema ->
@@ -188,6 +187,6 @@ class AvroUnitTest extends Specification {
         'schemas/user-1.0.0.json' | 'schemas/user-1.0.0.json' | v100MapBuilder | 'Reader matches writer'        || v100tov100RecordExpectation
         'schemas/user-1.1.0.json' | 'schemas/user-1.0.0.json' | v110MapBuilder | 'Writer adds additional field' || v110tov100RecordExpectation
         'schemas/user-1.0.0.json' | 'schemas/user-1.1.0.json' | v100MapBuilder | 'Reader adds additional field' || v100tov110RecordExpectation
-        'schemas/user-1.1.0.json' | 'schemas/user-1.2.0.json' | v110MapBuilder | 'Reader splits field in two'   || v110tov120RecordExpectation
+        'schemas/user-1.1.0.json' | 'schemas/user-1.2.0.json' | v110MapBuilder | 'Reader renames a field'       || v110tov120RecordExpectation
     }
 }
