@@ -1,6 +1,5 @@
 package avro.example
 
-import com.fasterxml.jackson.dataformat.avro.AvroSchema
 import org.apache.avro.Schema
 import org.apache.avro.file.DataFileReader
 import org.apache.avro.file.DataFileWriter
@@ -26,12 +25,6 @@ class AvroUnitTest extends Specification {
 
     static String randomString() {
         Integer.toHexString( ThreadLocalRandom.current().nextInt( 0, Integer.MAX_VALUE ) )
-    }
-
-    static AvroSchema loadJacksonSchema(String schemaFile ) {
-        def schemaStream = AvroUnitTest.class.classLoader.getResourceAsStream( schemaFile )
-        def raw = new Schema.Parser().setValidate( true ).parse( schemaStream )
-        new AvroSchema( raw )
     }
 
     static Schema loadSchema(String schemaFile ) {
@@ -82,12 +75,13 @@ class AvroUnitTest extends Specification {
     }
 
     static def v110tov100Expectation = { User110 writer, User100 reader ->
-        writer.name == reader.name
+        writer.name as String == reader.name as String
         // reader doesn't care about username yet
     }
 
     static def v100tov110Expectation = { User100 writer, User110 reader ->
-        (writer.name == reader.name) && ('foo' == reader.username)
+        (writer.name as String == reader.name as String) &&
+        (reader.username as String) // writer does not know about username
     }
 
     @Unroll( 'Object-based: #description' )
@@ -105,7 +99,7 @@ class AvroUnitTest extends Specification {
         where:
         writerSchemaFile          | readerSchemaFile          | writerClosure | readerClosure | description                    || expectation
         'schemas/user-1.0.0.json' | 'schemas/user-1.0.0.json' | v100Writer    | v100Reader    | 'Reader matches writer'        || v100tov100Expectation
-        'schemas/user-1.1.0.json' | 'schemas/user-1.0.0.json' | v110Writer    | v110Reader    | 'Writer adds additional field' || v110tov100Expectation
+        'schemas/user-1.1.0.json' | 'schemas/user-1.0.0.json' | v110Writer    | v100Reader    | 'Writer adds additional field' || v110tov100Expectation
         'schemas/user-1.0.0.json' | 'schemas/user-1.1.0.json' | v100Writer    | v110Reader    | 'Reader adds additional field' || v100tov110Expectation
     }
 
