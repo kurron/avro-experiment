@@ -13,6 +13,7 @@ import org.apache.avro.specific.SpecificDatumReader
 import org.apache.avro.specific.SpecificDatumWriter
 import org.kurron.avro.example.v100.user as User100
 import org.kurron.avro.example.v110.user as User110
+import org.kurron.avro.example.v120.user as User120
 import spock.lang.Specification
 import spock.lang.Unroll
 
@@ -67,7 +68,13 @@ class AvroUnitTest extends Specification {
     static def v110Reader = {
         DatumReader<User110> userDatumReader = new SpecificDatumReader<User110>(User110)
         DataFileReader<User110> dataFileReader = new DataFileReader<User110>(new File(dataFileLocation), userDatumReader)
-        dataFileReader.hasNext() ? dataFileReader.next( new User110() ) : new User100()
+        dataFileReader.hasNext() ? dataFileReader.next( new User110() ) : new User110()
+    }
+
+    static def v120Reader = {
+        DatumReader<User120> userDatumReader = new SpecificDatumReader<User120>(User120)
+        DataFileReader<User120> dataFileReader = new DataFileReader<User120>(new File(dataFileLocation), userDatumReader)
+        dataFileReader.hasNext() ? dataFileReader.next( new User120() ) : new User120()
     }
 
     static def v100tov100Expectation = { User100 writer, User100 reader ->
@@ -81,11 +88,17 @@ class AvroUnitTest extends Specification {
 
     static def v100tov110Expectation = { User100 writer, User110 reader ->
         (writer.name as String == reader.name as String) &&
-        (reader.username as String) // writer does not know about username
+        (reader.username as String == 'unknown') // writer does not know about username
+    }
+
+    static def v110tov120Expectation = { User110 writer, User120 reader ->
+        (writer.name as String == reader.firstname as String) &&
+        (reader.lastname as String == 'unknown') &&
+        (writer.username as String == reader.username as String)
     }
 
     @Unroll( 'Object-based: #description' )
-    void 'exercise jackson-based'() {
+    void 'exercise object-based'() {
 
         given: 'an encoded instance'
         def written = writerClosure.call()
@@ -101,6 +114,7 @@ class AvroUnitTest extends Specification {
         'schemas/user-1.0.0.json' | 'schemas/user-1.0.0.json' | v100Writer    | v100Reader    | 'Reader matches writer'        || v100tov100Expectation
         'schemas/user-1.1.0.json' | 'schemas/user-1.0.0.json' | v110Writer    | v100Reader    | 'Writer adds additional field' || v110tov100Expectation
         'schemas/user-1.0.0.json' | 'schemas/user-1.1.0.json' | v100Writer    | v110Reader    | 'Reader adds additional field' || v100tov110Expectation
+        'schemas/user-1.1.0.json' | 'schemas/user-1.2.0.json' | v110Writer    | v120Reader    | 'Reader splits field in two'   || v110tov120Expectation
     }
 
     static def v100MapBuilder = { Schema schema ->
@@ -130,6 +144,12 @@ class AvroUnitTest extends Specification {
         (writer.get( 'name' ) as String == reader.get( 'name' ) as String) &&
         !writer.get( 'username' ) as String && // writer does not have a username
         reader.get( 'username' ) as String
+    }
+
+    static def v110tov120RecordExpectation = { GenericRecord writer, GenericRecord reader ->
+        (writer.get( 'name' ) as String == reader.get( 'name' ) as String) &&
+                !writer.get( 'username' ) as String && // writer does not have a username
+                reader.get( 'username' ) as String
     }
 
     @Unroll( 'Map-based: #description' )
@@ -168,5 +188,6 @@ class AvroUnitTest extends Specification {
         'schemas/user-1.0.0.json' | 'schemas/user-1.0.0.json' | v100MapBuilder | 'Reader matches writer'        || v100tov100RecordExpectation
         'schemas/user-1.1.0.json' | 'schemas/user-1.0.0.json' | v110MapBuilder | 'Writer adds additional field' || v110tov100RecordExpectation
         'schemas/user-1.0.0.json' | 'schemas/user-1.1.0.json' | v100MapBuilder | 'Reader adds additional field' || v100tov110RecordExpectation
+        'schemas/user-1.1.0.json' | 'schemas/user-1.2.0.json' | v110MapBuilder | 'Reader splits field in two'   || v110tov120RecordExpectation
     }
 }

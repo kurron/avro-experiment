@@ -1,14 +1,21 @@
 {
   "type": "record",
-  "namespace": "org.kurron.avro.example.v110",
+  "namespace": "org.kurron.avro.example.v120",
   "name": "user",
   "doc": "structure representing a user in the system",
   "fields": [
     {
-      "name": "name",
+      "name": "firstname",
       "type": "string",
       "default": "unknown",
-      "doc": "the user's real world name"
+      "aliases": ["name"],
+      "doc": "the user's real world first name"
+    },
+    {
+      "name": "lastname",
+      "type": "string",
+      "default": "unknown",
+      "doc": "the user's real world last name"
     },
     {
       "name": "username",
