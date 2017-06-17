@@ -1,6 +1,6 @@
 {
   "type": "record",
-  "namespace": "kurron",
+  "namespace": "org.kurron.avro.example.v100",
   "name": "user",
   "doc": "structure representing a user in the system",
   "aliases": ["User"],

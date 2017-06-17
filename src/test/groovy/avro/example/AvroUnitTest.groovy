@@ -1,8 +1,6 @@
 package avro.example
 
-import com.fasterxml.jackson.dataformat.avro.AvroMapper
 import com.fasterxml.jackson.dataformat.avro.AvroSchema
-import groovy.transform.Canonical
 import org.apache.avro.Schema
 import org.apache.avro.file.DataFileReader
 import org.apache.avro.file.DataFileWriter
@@ -10,6 +8,12 @@ import org.apache.avro.generic.GenericData
 import org.apache.avro.generic.GenericDatumReader
 import org.apache.avro.generic.GenericDatumWriter
 import org.apache.avro.generic.GenericRecord
+import org.apache.avro.io.DatumReader
+import org.apache.avro.io.DatumWriter
+import org.apache.avro.specific.SpecificDatumReader
+import org.apache.avro.specific.SpecificDatumWriter
+import org.kurron.avro.example.v100.user as User100
+import org.kurron.avro.example.v110.user as User110
 import spock.lang.Specification
 import spock.lang.Unroll
 
@@ -19,17 +23,6 @@ import java.util.concurrent.ThreadLocalRandom
  * Exercise the various codec scenarios.
  */
 class AvroUnitTest extends Specification {
-
-    @Canonical
-    static class User100 {
-        String name
-    }
-
-    @Canonical
-    static class User110 {
-        String name
-        String username
-    }
 
     static String randomString() {
         Integer.toHexString( ThreadLocalRandom.current().nextInt( 0, Integer.MAX_VALUE ) )
@@ -46,16 +39,46 @@ class AvroUnitTest extends Specification {
         new Schema.Parser().setValidate( true ).parse( schemaStream )
     }
 
-    static def v100Builder = {
-        new User100( name: randomString() )
+    static final String dataFileLocation = 'build/written.bin'
+
+    static def v100Writer = {
+        DatumWriter<User100> datumWriter = new SpecificDatumWriter<User100>( User100 )
+        DataFileWriter<User100> dataFileWriter = new DataFileWriter<User100>( datumWriter )
+
+        def user = User100.newBuilder().setName( randomString() ).build()
+        dataFileWriter.create( user.getSchema(), new File( dataFileLocation ) )
+        dataFileWriter.append( user )
+        dataFileWriter.flush()
+        dataFileWriter.close()
+        user
     }
 
-    static def v110Builder = {
-        new User110( name: randomString(), username: randomString() )
+    static def v100Reader = {
+        DatumReader<User100> userDatumReader = new SpecificDatumReader<User100>(User100)
+        DataFileReader<User100> dataFileReader = new DataFileReader<User100>(new File(dataFileLocation), userDatumReader)
+        dataFileReader.hasNext() ? dataFileReader.next( new User100() ) : new User100()
+    }
+
+    static def v110Writer = {
+        DatumWriter<User110> datumWriter = new SpecificDatumWriter<User110>( User110 )
+        DataFileWriter<User110> dataFileWriter = new DataFileWriter<User110>( datumWriter )
+
+        def user = User110.newBuilder().setName( randomString() ).setUsername( randomString() ).build()
+        dataFileWriter.create( user.getSchema(), new File( dataFileLocation ) )
+        dataFileWriter.append( user )
+        dataFileWriter.flush()
+        dataFileWriter.close()
+        user
+    }
+
+    static def v110Reader = {
+        DatumReader<User110> userDatumReader = new SpecificDatumReader<User110>(User110)
+        DataFileReader<User110> dataFileReader = new DataFileReader<User110>(new File(dataFileLocation), userDatumReader)
+        dataFileReader.hasNext() ? dataFileReader.next( new User110() ) : new User100()
     }
 
     static def v100tov100Expectation = { User100 writer, User100 reader ->
-        writer.name == reader.name
+        writer == reader // should be 100% equivalent
     }
 
     static def v110tov100Expectation = { User110 writer, User100 reader ->
@@ -68,32 +91,22 @@ class AvroUnitTest extends Specification {
     }
 
     @Unroll( 'Object-based: #description' )
-    void 'exercise object-based'() {
+    void 'exercise jackson-based'() {
 
-        given: 'a writer schema'
-        def writerSchema = loadJacksonSchema( writerSchemaFile )
-
-        and: 'a mapper'
-        def mapper = new AvroMapper()
-
-        and: 'a reader schema'
-        def readerSchema = loadJacksonSchema( readerSchemaFile )
-
-        and: 'an encoded instance'
-        def original = writerClosure.call()
-        byte[] encoded = mapper.writer( writerSchema ).writeValueAsBytes( original )
+        given: 'an encoded instance'
+        def written = writerClosure.call()
 
         when: 'the instance is decoded'
-        def decoded = mapper.readerFor( readerType ).with( readerSchema ).readValue( encoded )
+        def read = readerClosure.call()
 
         then: 'encoded and decoded match'
-        expectation.call( original, decoded )
+        expectation.call( written, read )
 
         where:
-        writerSchemaFile          | readerSchemaFile          | writerClosure | readerType    | description                    || expectation
-        'schemas/user-1.0.0.json' | 'schemas/user-1.0.0.json' | v100Builder   | User100.class | 'Reader matches writer'        || v100tov100Expectation
-        'schemas/user-1.1.0.json' | 'schemas/user-1.0.0.json' | v110Builder   | User100.class | 'Writer adds additional field' || v110tov100Expectation
-        'schemas/user-1.0.0.json' | 'schemas/user-1.1.0.json' | v100Builder   | User110.class | 'Reader adds additional field' || v100tov110Expectation
+        writerSchemaFile          | readerSchemaFile          | writerClosure | readerClosure | description                    || expectation
+        'schemas/user-1.0.0.json' | 'schemas/user-1.0.0.json' | v100Writer    | v100Reader    | 'Reader matches writer'        || v100tov100Expectation
+        'schemas/user-1.1.0.json' | 'schemas/user-1.0.0.json' | v110Writer    | v110Reader    | 'Writer adds additional field' || v110tov100Expectation
+        'schemas/user-1.0.0.json' | 'schemas/user-1.1.0.json' | v100Writer    | v110Reader    | 'Reader adds additional field' || v100tov110Expectation
     }
 
     static def v100MapBuilder = { Schema schema ->
