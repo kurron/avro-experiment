@@ -7,9 +7,23 @@ subprojects {
     sourceCompatibility = 1.8
     targetCompatibility = 1.8
 
+    repositories {
+        jcenter()
+
+        maven {
+            url " http://dl.bintray.com/kurron/maven"
+        }
+    }
+
     dependencies {
         compile("org.apache.avro:avro:1.8.2")
         compile("org.apache.avro:avro-tools:1.8.2")
+    }
+
+    task generateFromSchema( type: JavaExec ) {
+        classpath = sourceSets.main.runtimeClasspath
+        main = 'org.apache.avro.tool.Main'
+        args = ['compile', 'schema', "src/test/resources/schema/user.json", "${projectDir.path}/src/test/java"]
     }
 
     task hello {
@@ -19,4 +33,4 @@ subprojects {
     }
 }
 
-defaultTasks = ['hello']
+defaultTasks = ['generateFromSchema']
