@@ -1,52 +1,22 @@
-buildscript {
-    repositories {
-        jcenter()
-    }
+
+
+
+subprojects {
+    apply plugin: 'groovy'
+
+    sourceCompatibility = 1.8
+    targetCompatibility = 1.8
+
     dependencies {
-        classpath("org.springframework.boot:spring-boot-gradle-plugin:1.5.3.RELEASE")
-        classpath 'io.spring.gradle:dependency-management-plugin:1.0.3.RELEASE'
+        compile("org.apache.avro:avro:1.8.2")
+        compile("org.apache.avro:avro-tools:1.8.2")
+    }
+
+    task hello {
+        doLast { task ->
+            println "I'm $task.project.name"
+        }
     }
 }
 
-apply plugin: 'io.spring.dependency-management'
-apply plugin: 'groovy'
-apply plugin: 'spring-boot'
-
-jar {
-    baseName = 'avro'
-    version = '0.0.0-MILESTONE'
-}
-sourceCompatibility = 1.8
-targetCompatibility = 1.8
-
-repositories {
-    jcenter()
-
-    maven {
-        url " http://dl.bintray.com/kurron/maven"
-    }
-}
-
-
-dependencies {
-    compile("org.springframework.boot:spring-boot-starter")
-    compile("org.codehaus.groovy:groovy")
-    compile("org.apache.avro:avro:1.8.2")
-    compile("org.apache.avro:avro-tools:1.8.2")
-    compile 'com.fasterxml.jackson.dataformat:jackson-dataformat-avro:2.8.9'
-    testCompile("org.springframework.boot:spring-boot-starter-test")
-    testCompile( "org.kurron:tools-groovy:1.6.3.RELEASE" ) {
-        exclude module: 'groovy-all'
-    }
-    testCompile( "org.spockframework:spock-spring:1.1-groovy-2.4" ) {
-        exclude module: 'groovy-all'
-        exclude module: 'junit'
-    }
-    testCompile( "org.spockframework:spock-core:1.1-groovy-2.4" ) {
-        exclude module: 'groovy-all'
-        exclude module: 'junit'
-    }
-}
-
-
-defaultTasks = ['clean', 'build']
+defaultTasks = ['hello']
