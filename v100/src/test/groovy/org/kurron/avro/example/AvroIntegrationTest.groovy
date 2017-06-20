@@ -6,8 +6,6 @@ import org.apache.avro.specific.SpecificDatumReader
 import org.apache.avro.specific.SpecificDatumWriter
 import spock.lang.Specification
 
-import java.util.concurrent.ThreadLocalRandom
-
 /**
  * Exercises Avro codec.
  */
@@ -15,13 +13,9 @@ class AvroIntegrationTest extends Specification {
 
     static final dataFileLocation = 'build/written.bin'
 
-    static String randomString() {
-        Integer.toHexString( ThreadLocalRandom.current().nextInt( 0, Integer.MAX_VALUE ) )
-    }
-
     def 'exercise codec'() {
         given: 'a fresh object'
-        def encoded = User.newBuilder().setName( randomString() ).build()
+        def encoded = User.newBuilder().setName( 'name-v100' ).build()
 
         and: 'a writer'
         def datumWriter = new SpecificDatumWriter<User>( User )

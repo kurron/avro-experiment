@@ -13,6 +13,7 @@ import java.util.concurrent.ThreadLocalRandom
  */
 class AvroIntegrationTest extends Specification {
 
+    static final previousVersionDataFileLocation = '../v100/build/written.bin'
     static final dataFileLocation = 'build/written.bin'
 
     static String randomString() {
@@ -41,6 +42,16 @@ class AvroIntegrationTest extends Specification {
         then: 'the encoded and decoded match'
         encoded.name == decoded.name as String
         encoded.username == decoded.username as String
+    }
 
+    def 'exercise backwards compatibility'() {
+        when: 'an object decoded from disk'
+        def userDatumReader = new SpecificDatumReader<User>(User)
+        def dataFileReader = new DataFileReader<User>(new File(previousVersionDataFileLocation), userDatumReader)
+        def decoded = dataFileReader.hasNext() ? dataFileReader.next( new User() ) : new User()
+
+        then: 'the decoded attributes make sense'
+        'name-v100' == decoded.name as String
+        'unknown' == decoded.username as String
     }
 }
