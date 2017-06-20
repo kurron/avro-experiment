@@ -11,12 +11,14 @@ import spock.lang.Specification
  */
 class AvroIntegrationTest extends Specification {
 
-    static final previousVersionDataFileLocation = '../v100/build/written.bin'
+    static final previousVersionDataFileLocation = '../v110/build/written.bin'
     static final dataFileLocation = 'build/written.bin'
 
     def 'exercise codec'() {
         given: 'a fresh object'
-        def encoded = User.newBuilder().setName( 'name-v110' ).setUsername( 'username-v110' ).build()
+        def encoded = User.newBuilder().setFirstname( 'firstname-v120' )
+                                       .setLastname( 'lastname-v120' )
+                                       .setUsername( 'username-v120' ).build()
 
         and: 'a writer'
         def datumWriter = new SpecificDatumWriter<User>( User )
@@ -34,7 +36,8 @@ class AvroIntegrationTest extends Specification {
         def decoded = dataFileReader.hasNext() ? dataFileReader.next( new User() ) : new User()
 
         then: 'the encoded and decoded match'
-        encoded.name == decoded.name as String
+        encoded.firstname == decoded.firstname as String
+        encoded.lastname == decoded.lastname as String
         encoded.username == decoded.username as String
     }
 
@@ -45,7 +48,8 @@ class AvroIntegrationTest extends Specification {
         def decoded = dataFileReader.hasNext() ? dataFileReader.next( new User() ) : new User()
 
         then: 'the decoded attributes make sense'
-        'name-v100' == decoded.name as String
-        'unknown' == decoded.username as String
+        'name-v110' == decoded.firstname as String
+        'unknown' == decoded.lastname as String
+        'username-v110' == decoded.username as String
     }
 }
