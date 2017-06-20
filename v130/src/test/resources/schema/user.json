@@ -48,6 +48,12 @@
       "logicalType": "time-millis",
       "default": 0,
       "doc": "time when the user was added to the system"
+    },
+    {
+      "name": "gender",
+      "type": { "type": "enum", "name": "Gender", "symbols" : ["MALE", "FEMALE", "UNDECLARED"] },
+      "default": "UNDECLARED",
+      "doc": "the user's declared gender"
     }
   ]
 }

@@ -28,6 +28,7 @@ class AvroIntegrationTest extends Specification {
                                        .setId( Integer.MAX_VALUE )
                                        .setAddedDate( date )
                                        .setAddedTime( time )
+                                       .setGender( Gender.FEMALE )
                                        .build()
 
         and: 'a writer'
@@ -53,6 +54,7 @@ class AvroIntegrationTest extends Specification {
         encoded.id == decoded.id
         encoded.addedDate == decoded.addedDate
         encoded.addedTime == decoded.addedTime
+        encoded.gender == decoded.gender
     }
 
     def 'exercise backwards compatibility'() {
@@ -69,5 +71,6 @@ class AvroIntegrationTest extends Specification {
         0 == decoded.id
         0 == decoded.addedDate
         0 == decoded.addedTime
+        Gender.UNDECLARED == decoded.gender
     }
 }
