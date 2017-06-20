@@ -7,20 +7,20 @@
     {
       "name": "firstname",
       "type": "string",
-      "default": "defaulted v120 firstname",
+      "default": "defaulted v130 firstname",
       "aliases": ["name"],
       "doc": "the user's real world first name"
     },
     {
       "name": "lastname",
       "type": "string",
-      "default": "defaulted v120 lastname",
+      "default": "defaulted v130 lastname",
       "doc": "the user's real world last name"
     },
     {
       "name": "username",
       "type": "string",
-      "default": "defaulted v120 username",
+      "default": "defaulted v130 username",
       "doc": "the user's system login"
     },
     {
