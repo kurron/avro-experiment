@@ -21,7 +21,7 @@ class AvroIntegrationTest extends Specification {
 
     def 'exercise codec'() {
         given: 'a fresh object'
-        def encoded = User.newBuilder().setName( randomString() ).build()
+        def encoded = User.newBuilder().setName( randomString() ).setUsername( randomString() ).build()
 
         and: 'a writer'
         def datumWriter = new SpecificDatumWriter<User>( User )
@@ -40,5 +40,7 @@ class AvroIntegrationTest extends Specification {
 
         then: 'the encoded and decoded match'
         encoded.name == decoded.name as String
+        encoded.username == decoded.username as String
+
     }
 }

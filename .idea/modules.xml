@@ -6,6 +6,9 @@
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/v100/v100.iml" filepath="$PROJECT_DIR$/.idea/modules/v100/v100.iml" group="v100" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/v100/v100_main.iml" filepath="$PROJECT_DIR$/.idea/modules/v100/v100_main.iml" group="v100" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/v100/v100_test.iml" filepath="$PROJECT_DIR$/.idea/modules/v100/v100_test.iml" group="v100" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/v110/v110.iml" filepath="$PROJECT_DIR$/.idea/modules/v110/v110.iml" group="v110" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/v110/v110_main.iml" filepath="$PROJECT_DIR$/.idea/modules/v110/v110_main.iml" group="v110" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/v110/v110_test.iml" filepath="$PROJECT_DIR$/.idea/modules/v110/v110_test.iml" group="v110" />
     </modules>
   </component>
 </project>
