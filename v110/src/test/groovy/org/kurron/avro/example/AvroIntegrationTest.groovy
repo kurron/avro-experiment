@@ -46,6 +46,6 @@ class AvroIntegrationTest extends Specification {
 
         then: 'the decoded attributes make sense'
         'name-v100' == decoded.name as String
-        'unknown' == decoded.username as String
+        'defaulted v110 username' == decoded.username as String
     }
 }

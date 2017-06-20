@@ -7,13 +7,13 @@
     {
       "name": "name",
       "type": "string",
-      "default": "unknown",
+      "default": "defaulted v110 name",
       "doc": "the user's real world name"
     },
     {
       "name": "username",
       "type": "string",
-      "default": "unknown",
+      "default": "defaulted v110 username",
       "doc": "the user's system login"
     }
   ]

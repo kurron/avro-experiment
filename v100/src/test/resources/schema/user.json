@@ -7,7 +7,7 @@
     {
       "name": "name",
       "type": "string",
-      "default": "unknown",
+      "default": "defaulted v100 name",
       "doc": "the user's real world name"
     }
   ]

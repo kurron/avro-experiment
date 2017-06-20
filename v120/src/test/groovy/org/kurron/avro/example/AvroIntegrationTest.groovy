@@ -49,7 +49,7 @@ class AvroIntegrationTest extends Specification {
 
         then: 'the decoded attributes make sense'
         'name-v110' == decoded.firstname as String
-        'unknown' == decoded.lastname as String
+        'defaulted v120 lastname' == decoded.lastname as String
         'username-v110' == decoded.username as String
     }
 }
