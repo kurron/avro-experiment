@@ -1,7 +1,7 @@
 {
   "type": "record",
   "namespace": "org.kurron.avro.example",
-  "name": "user",
+  "name": "User",
   "doc": "structure representing a user in the system",
   "fields": [
     {

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/avro-experiment.iml" filepath="$PROJECT_DIR$/.idea/modules/avro-experiment.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/v100/v100.iml" filepath="$PROJECT_DIR$/.idea/modules/v100/v100.iml" group="v100" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/v100/v100_main.iml" filepath="$PROJECT_DIR$/.idea/modules/v100/v100_main.iml" group="v100" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/v100/v100_test.iml" filepath="$PROJECT_DIR$/.idea/modules/v100/v100_test.iml" group="v100" />
+    </modules>
+  </component>
+</project>

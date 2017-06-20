@@ -16,8 +16,12 @@ subprojects {
     }
 
     dependencies {
+        compile("org.codehaus.groovy:groovy:2.4.11")
         compile("org.apache.avro:avro:1.8.2")
         compile("org.apache.avro:avro-tools:1.8.2")
+        testCompile( "org.spockframework:spock-core:1.1-groovy-2.4" ) {
+            exclude module: 'groovy-all'
+        }
     }
 
     task generateFromSchema( type: JavaExec ) {
@@ -33,4 +37,4 @@ subprojects {
     }
 }
 
-defaultTasks = ['generateFromSchema']
+defaultTasks = ['generateFromSchema', 'clean', 'build']
