@@ -30,6 +30,7 @@ class AvroIntegrationTest extends Specification {
                                        .setAddedTime( time )
                                        .setGender( Gender.FEMALE )
                                        .build()
+        encoded.comments.add( 'Reset password' )
 
         and: 'a writer'
         def datumWriter = new SpecificDatumWriter<User>( User )
@@ -55,6 +56,7 @@ class AvroIntegrationTest extends Specification {
         encoded.addedDate == decoded.addedDate
         encoded.addedTime == decoded.addedTime
         encoded.gender == decoded.gender
+        encoded.comments == decoded.comments
     }
 
     def 'exercise backwards compatibility'() {
@@ -72,5 +74,6 @@ class AvroIntegrationTest extends Specification {
         0 == decoded.addedDate
         0 == decoded.addedTime
         Gender.UNDECLARED == decoded.gender
+        [] == decoded.comments
     }
 }

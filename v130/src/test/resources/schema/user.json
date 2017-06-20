@@ -54,6 +54,12 @@
       "type": { "type": "enum", "name": "Gender", "symbols" : ["MALE", "FEMALE", "UNDECLARED"] },
       "default": "UNDECLARED",
       "doc": "the user's declared gender"
+    },
+    {
+      "name": "comments",
+      "type": { "type": "array", "name": "Comments", "items" : "string" },
+      "default": "Avro ignores this for arrays.  The default is an empty array.",
+      "doc": "collection of notes inserted by the administrator"
     }
   ]
 }
