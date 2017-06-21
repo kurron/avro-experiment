@@ -60,6 +60,12 @@
       "type": { "type": "array", "name": "Comments", "items" : "string" },
       "default": "Avro ignores this for arrays.  The default is an empty array.",
       "doc": "collection of notes inserted by the administrator"
+    },
+    {
+      "name": "sessions",
+      "type": { "type": "map", "name": "Sessions", "values" : "int" },
+      "default": "Avro ignores this for maps.  The default is an empty map.",
+      "doc": "map of session duration time (seconds) keyed by the month, eg. July"
     }
   ]
 }
