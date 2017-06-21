@@ -58,7 +58,8 @@ class AvroIntegrationTest extends Specification {
         encoded.addedTime == decoded.addedTime
         encoded.gender == decoded.gender
         encoded.comments == decoded.comments
-        encoded.sessions == decoded.sessions
+        // there is a CharSet to String comparison issue with the keys
+        encoded.sessions as String == decoded.sessions as String
     }
 
     def 'exercise backwards compatibility'() {
