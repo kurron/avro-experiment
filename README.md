@@ -34,6 +34,10 @@ scenarios:
 The schema version uses [Semantic Versioning](http://semver.org/) to indicate
 breaking and non-breaking changes.
 
+## Definitions
+* **Backward Compatibility** - the writer is using a newer schema than the reader 
+* **Forward Compatibility** - the writer is using an older schema than the reader 
+ 
 # Prerequisites
 
 * [JDK](http://www.oracle.com/technetwork/java/index.html) installed and working
@@ -46,6 +50,7 @@ Use `./gradlew` to execute the [Gradle](https://gradle.org/) build script.
 There is noting to install.
 
 # Tips and Tricks
+
 ## Jackson'S Avro Support
 Initial testing was done using [Jackson's Avro support](https://github.com/FasterXML/jackson-dataformats-binary/tree/master/avro)
 but it was quickly found that it does not support default values.  The test code has
