@@ -30,6 +30,8 @@ subprojects {
         args = ['compile', 'schema', "src/test/resources/schema/user.json", "${projectDir.path}/src/test/java"]
     }
 
+    test.dependsOn( generateFromSchema )
+
     task hello {
         doLast { task ->
             println "I'm $task.project.name"
@@ -37,4 +39,4 @@ subprojects {
     }
 }
 
-defaultTasks = ['generateFromSchema', 'clean', 'build']
+defaultTasks = ['clean', 'build']
