@@ -70,6 +70,27 @@ The generated Avro structures do not use native JVM strings and, instead, use ei
 a custom UTF-8 class or `java.lang.CharSequence`.  For this reason, the tests
 contain conversions that you might find odd.
 
+## How We Test
+Each schema revision must live in its own module because the schema's namespace
+must remain constant or the compatibility conversions will not be applied.
+For example, changing the namespace from `org.kurron.avro.example` to
+`org.kurron.avro.example.v100` would, in Avro's mind, create two separate entities
+and it would not attempt a conversion.
+
+We are counting on Gradle's current behavior of building the modules in the order
+that they are defined in the `settings.gradle` file.  This is required because
+the input of a test is the output file of the previous module.  For example,
+the v130 test attempts to read the v120 file so as to test forwards compatibility.
+
+## Interesting Avro Features
+1. You can rename a field via the `aliases` construct.
+1. Providing a default value for a field, via the `default` construct, guarantees forward compatibility.
+1. Fields of type `int`, `long`, `float`, `string` and `byte` can be changed in a compatible way.
+1. Rich constructs, such as `records`, `array`, `maps`, `enums` and `unions` provide many possible structures.
+1. Logical types, including `Date`, `Time` and `Duration` exist.
+1. Batch processing is supported via files.
+1. RPC messaging is also supported.
+
 # Troubleshooting
 
 # License and Credits
