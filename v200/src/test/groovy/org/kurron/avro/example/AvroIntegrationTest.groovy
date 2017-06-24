@@ -64,7 +64,7 @@ class AvroIntegrationTest extends Specification {
         encoded.sessions as String == decoded.sessions as String
     }
 
-    def 'exercise backwards compatibility'() {
+    def 'exercise forwards compatibility'() {
         when: 'an object decoded from disk'
         def userDatumReader = new SpecificDatumReader<User>(User)
         def dataFileReader = new DataFileReader<User>(new File(previousVersionDataFileLocation), userDatumReader)
