@@ -6,6 +6,7 @@ import org.apache.avro.specific.SpecificDatumReader
 import org.apache.avro.specific.SpecificDatumWriter
 import spock.lang.Specification
 
+import java.nio.ByteBuffer
 import java.time.LocalDateTime
 
 /**
@@ -18,9 +19,17 @@ class AvroIntegrationTest extends Specification {
     static final now = LocalDateTime.now()
     static final date = now.toLocalDate().toEpochDay() as int
     static final time = now.toLocalTime().toSecondOfDay() * 1000
+    static final intToLong = now.toLocalDate().toEpochDay() as int
+    static final stringToBytes = now.toLocalDate().toString()
+    static final bytesToString = now.toLocalDate().toString().getBytes( 'UTF-8')
 
     def 'exercise codec'() {
         given: 'a fresh object'
+        def promotionExample = PromotionExample.newBuilder()
+                                               .setIntToLong( intToLong )
+                                               .setStringToBytes( stringToBytes )
+                                               .setBytesToString(ByteBuffer.wrap( bytesToString ) )
+                                               .build()
         def encoded = User.newBuilder().setFirstname( 'firstname-v130' )
                                        .setLastname( 'lastname-v130' )
                                        .setUsername( 'username-v130' )
@@ -29,6 +38,7 @@ class AvroIntegrationTest extends Specification {
                                        .setAddedDate( date )
                                        .setAddedTime( time )
                                        .setGender( Gender.FEMALE )
+                                       .setPromotionExample( promotionExample )
                                        .build()
         encoded.comments.add( 'Reset password' )
         encoded.sessions['May'] = 130
@@ -60,6 +70,10 @@ class AvroIntegrationTest extends Specification {
         encoded.comments == decoded.comments
         // there is a CharSet to String comparison issue with the keys
         encoded.sessions as String == decoded.sessions as String
+
+        encoded.promotionExample.intToLong == decoded.promotionExample.intToLong
+        encoded.promotionExample.stringToBytes == decoded.promotionExample.stringToBytes as String
+        encoded.promotionExample.bytesToString == decoded.promotionExample.bytesToString
     }
 
     def 'exercise backwards compatibility'() {
@@ -79,5 +93,8 @@ class AvroIntegrationTest extends Specification {
         Gender.UNDECLARED == decoded.gender
         [] == decoded.comments
         [:] == decoded.sessions
+        -1 == decoded.promotionExample.intToLong
+        'defaulted v130 stringToBytes' == decoded.promotionExample.stringToBytes as String
+        ByteBuffer.wrap( 'defaulted v130 bytesToString'.getBytes( 'UTF-8' ) ) == decoded.promotionExample.bytesToString
     }
 }
