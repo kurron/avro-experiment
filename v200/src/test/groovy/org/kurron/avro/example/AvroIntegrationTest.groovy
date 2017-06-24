@@ -1,12 +1,12 @@
 package org.kurron.avro.example
 
+import org.apache.avro.AvroTypeException
 import org.apache.avro.file.DataFileReader
 import org.apache.avro.file.DataFileWriter
 import org.apache.avro.specific.SpecificDatumReader
 import org.apache.avro.specific.SpecificDatumWriter
 import spock.lang.Specification
 
-import java.nio.ByteBuffer
 import java.time.LocalDateTime
 
 /**
@@ -14,34 +14,26 @@ import java.time.LocalDateTime
  */
 class AvroIntegrationTest extends Specification {
 
-    static final previousVersionDataFileLocation = '../v120/build/written.bin'
+    static final previousVersionDataFileLocation = '../v140/build/written.bin'
     static final dataFileLocation = 'build/written.bin'
     static final now = LocalDateTime.now()
     static final date = now.toLocalDate().toEpochDay() as int
     static final time = now.toLocalTime().toSecondOfDay() * 1000
-    static final intToLong = now.toLocalDate().toEpochDay() as int
-    static final stringToBytes = now.toLocalDate().toString()
-    static final bytesToString = now.toLocalDate().toString().getBytes( 'UTF-8')
 
     def 'exercise codec'() {
         given: 'a fresh object'
-        def promotionExample = PromotionExample.newBuilder()
-                                               .setIntToLong( intToLong )
-                                               .setStringToBytes( stringToBytes )
-                                               .setBytesToString(ByteBuffer.wrap( bytesToString ) )
-                                               .build()
-        def encoded = User.newBuilder().setFirstname( 'firstname-v130' )
-                                       .setLastname( 'lastname-v130' )
-                                       .setUsername( 'username-v130' )
+        def encoded = User.newBuilder().setFirstname( 'firstname-v200' )
+                                       .setLastname( 'lastname-v200' )
+                                       .setUsername( 'username-v200' )
                                        .setActive( true )
                                        .setId( Integer.MAX_VALUE )
                                        .setAddedDate( date )
                                        .setAddedTime( time )
                                        .setGender( Gender.FEMALE )
-                                       .setPromotionExample( promotionExample )
+                                       .setBreakingChange( 'breakingChange-v200' )
                                        .build()
-        encoded.comments.add( 'Reset password v130' )
-        encoded.sessions['May'] = 130
+        encoded.comments.add( 'Reset password v200' )
+        encoded.sessions['May'] = 200
 
         and: 'a writer'
         def datumWriter = new SpecificDatumWriter<User>( User )
@@ -70,31 +62,16 @@ class AvroIntegrationTest extends Specification {
         encoded.comments == decoded.comments
         // there is a CharSet to String comparison issue with the keys
         encoded.sessions as String == decoded.sessions as String
-
-        encoded.promotionExample.intToLong == decoded.promotionExample.intToLong
-        encoded.promotionExample.stringToBytes == decoded.promotionExample.stringToBytes as String
-        encoded.promotionExample.bytesToString == decoded.promotionExample.bytesToString
     }
 
     def 'exercise backwards compatibility'() {
         when: 'an object decoded from disk'
         def userDatumReader = new SpecificDatumReader<User>(User)
         def dataFileReader = new DataFileReader<User>(new File(previousVersionDataFileLocation), userDatumReader)
-        def decoded = dataFileReader.hasNext() ? dataFileReader.next( new User() ) : new User()
+        dataFileReader.hasNext() ? dataFileReader.next( new User() ) : new User()
 
-        then: 'the decoded attributes make sense'
-        'firstname-v120' == decoded.firstname as String
-        'lastname-v120' == decoded.lastname as String
-        'username-v120' == decoded.username as String
-        true == decoded.active
-        0 == decoded.id
-        0 == decoded.addedDate
-        0 == decoded.addedTime
-        Gender.UNDECLARED == decoded.gender
-        [] == decoded.comments
-        [:] == decoded.sessions
-        -1 == decoded.promotionExample.intToLong
-        'defaulted v130 stringToBytes' == decoded.promotionExample.stringToBytes as String
-        ByteBuffer.wrap( 'defaulted v130 bytesToString'.getBytes( 'UTF-8' ) ) == decoded.promotionExample.bytesToString
+        then: 'Avro complains about a missing required field'
+        def error = thrown( AvroTypeException )
+        error.message.contains( 'missing required field breakingChange' )
     }
 }

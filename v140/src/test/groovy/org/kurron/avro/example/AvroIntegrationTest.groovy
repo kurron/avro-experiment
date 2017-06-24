@@ -31,9 +31,9 @@ class AvroIntegrationTest extends Specification {
                                                .setStringToBytes( ByteBuffer.wrap( stringToBytes ) )
                                                .setBytesToString( bytesToString )
                                                .build()
-        def encoded = User.newBuilder().setFirstname( 'firstname-v130' )
-                                       .setLastname( 'lastname-v130' )
-                                       .setUsername( 'username-v130' )
+        def encoded = User.newBuilder().setFirstname( 'firstname-v140' )
+                                       .setLastname( 'lastname-v140' )
+                                       .setUsername( 'username-v140' )
                                        .setActive( true )
                                        .setId( Integer.MAX_VALUE )
                                        .setAddedDate( date )
@@ -41,8 +41,8 @@ class AvroIntegrationTest extends Specification {
                                        .setGender( Gender.FEMALE )
                                        .setPromotionExample( promotionExample )
                                        .build()
-        encoded.comments.add( 'Reset password' )
-        encoded.sessions['May'] = 130
+        encoded.comments.add( 'Reset password v140' )
+        encoded.sessions['May'] = 140
 
         and: 'a writer'
         def datumWriter = new SpecificDatumWriter<User>( User )
@@ -92,7 +92,7 @@ class AvroIntegrationTest extends Specification {
         date == decoded.addedDate
         0 < decoded.addedTime // can't know the exact millisecond saved
         Gender.FEMALE == decoded.gender
-        'Reset password' == decoded.comments.first() as String
+        'Reset password v130' == decoded.comments.first() as String
         // Avro's instance to not use String is annoying and make comparisons more difficult
         130 == decoded.sessions[ new Utf8('May') ]
         date == decoded.promotionExample.intToLong
