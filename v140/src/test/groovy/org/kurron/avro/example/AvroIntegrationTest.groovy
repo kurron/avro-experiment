@@ -15,8 +15,8 @@ import java.time.LocalDateTime
  */
 class AvroIntegrationTest extends Specification {
 
-    static final previousVersionDataFileLocation = '../v130/build/written.bin'
-    static final dataFileLocation = 'build/written.bin'
+    static final previousVersionDataFileLocation = '../v130.bin'
+    static final dataFileLocation = '../v140.bin'
     static final now = LocalDateTime.now()
     static final date = now.toLocalDate().toEpochDay() as int
     static final time = now.toLocalTime().toSecondOfDay() * 1000

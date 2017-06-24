@@ -11,7 +11,7 @@ import spock.lang.Specification
  */
 class AvroIntegrationTest extends Specification {
 
-    static final dataFileLocation = 'build/written.bin'
+    static final dataFileLocation = '../v100.bin'
 
     def 'exercise codec'() {
         given: 'a fresh object'
