@@ -10,11 +10,10 @@ import spock.lang.Specification
 class AvroIntegrationTest extends Specification {
 
     static final previousVersionDataFileLocation = '../v100.bin'
-    static final dataFileLocation = '../v110.bin'
 
     def 'exercise codec'() {
         given: 'a data file with an object in it'
-        def datafile = new File(dataFileLocation)
+        def datafile = new File(DatFileWriter.dataFileLocation)
 
         when: 'the object is decoded from disk'
         def userDatumReader = new SpecificDatumReader<User>(User)

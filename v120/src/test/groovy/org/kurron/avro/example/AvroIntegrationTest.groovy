@@ -1,9 +1,7 @@
 package org.kurron.avro.example
 
 import org.apache.avro.file.DataFileReader
-import org.apache.avro.file.DataFileWriter
 import org.apache.avro.specific.SpecificDatumReader
-import org.apache.avro.specific.SpecificDatumWriter
 import spock.lang.Specification
 
 /**
@@ -12,33 +10,20 @@ import spock.lang.Specification
 class AvroIntegrationTest extends Specification {
 
     static final previousVersionDataFileLocation = '../v110.bin'
-    static final dataFileLocation = '../v120.bin'
 
     def 'exercise codec'() {
-        given: 'a fresh object'
-        def encoded = User.newBuilder().setFirstname( 'firstname-v120' )
-                                       .setLastname( 'lastname-v120' )
-                                       .setUsername( 'username-v120' ).build()
-
-        and: 'a writer'
-        def datumWriter = new SpecificDatumWriter<User>( User )
-        def dataFileWriter = new DataFileWriter<User>( datumWriter )
-
-        and: 'an object is encoded to disk'
-        dataFileWriter.create( encoded.getSchema(), new File( dataFileLocation ) )
-        dataFileWriter.append( encoded )
-        dataFileWriter.flush()
-        dataFileWriter.close()
+        given: 'an encoded file'
+        def dataFile = new File(DatFileWriter.dataFileLocation)
 
         when: 'the object is decoded from disk'
         def userDatumReader = new SpecificDatumReader<User>(User)
-        def dataFileReader = new DataFileReader<User>(new File(dataFileLocation), userDatumReader)
+        def dataFileReader = new DataFileReader<User>(dataFile, userDatumReader)
         def decoded = dataFileReader.hasNext() ? dataFileReader.next( new User() ) : new User()
 
         then: 'the encoded and decoded match'
-        encoded.firstname == decoded.firstname as String
-        encoded.lastname == decoded.lastname as String
-        encoded.username == decoded.username as String
+        DatFileWriter.FIRST_NAME == decoded.firstname as String
+        DatFileWriter.LAST_NAME == decoded.lastname as String
+        DatFileWriter.USERNAME == decoded.username as String
     }
 
     def 'exercise forwards compatibility'() {
