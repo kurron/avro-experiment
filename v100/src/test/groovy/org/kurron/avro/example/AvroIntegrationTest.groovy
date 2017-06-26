@@ -12,7 +12,7 @@ class AvroIntegrationTest extends Specification {
     static final dataFileLocation = '../v100.bin'
 
     def 'exercise codec'() {
-        given: 'a fresh object'
+        given: 'a data file with an object in it'
         def dataFile = new File(dataFileLocation)
 
         when: 'the object is decoded from disk'
