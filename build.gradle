@@ -22,12 +22,19 @@ subprojects {
     }
 
     task generateFromSchema( type: JavaExec ) {
-        classpath = sourceSets.main.runtimeClasspath
+        classpath = files( '../avro-tools-1.8.2.jar' )
         main = 'org.apache.avro.tool.Main'
-        args = ['compile', 'schema', "src/test/resources/schema/user.json", "${projectDir.path}/src/test/java"]
+        args = ['compile', 'schema', "${projectDir.path}/src/main/resources/schema/user.json", "${projectDir.path}/src/main/java"]
     }
 
-    test.dependsOn( generateFromSchema )
+    task writeData( type: JavaExec ) {
+        classpath = sourceSets.main.runtimeClasspath
+        main = 'org.kurron.avro.example.DatFileWriter'
+        args = []
+    }
+
+    compileJava.dependsOn( generateFromSchema )
+    compileTestGroovy.dependsOn( writeData )
 
     task hello {
         doLast { task ->
