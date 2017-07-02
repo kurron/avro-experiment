@@ -135,15 +135,16 @@ is by embedding a reference to the schema with the data.
 }
 ```
 
-The application would consume the JSON and dereference the `schema` attribute and read
-the `data` attribute with that schema.  The AMQP protocol has the `type` header which
-can be used to hold the schema reference to the binary payload, if RabbitMQ messaging
-is being used.  The benefit of perfect deserialization coupled with by-hand migration
-rules must be questioned.  The application must be updated each time an unknown schema
-is encountered.  This is not the case when using Avro generated data objects.  Perhaps
-automated testing of any newly generated schema is a better solution.  We've essentially
-done that in this project and ideas could be refined into something that could live in
-a CI/CD pipeline.
+The application would consume the JSON, dereference the `schema` attribute and read
+the `data` attribute with that schema.  In a RabbitMQ setting, the AMQP protocol has
+the `type` header which can be used to hold the schema reference to the binary payload.
+
+The benefit of perfect deserialization coupled with by-hand migration rules must be
+questioned. The application must be updated each time an unknown schema is encountered.
+This is not the case when using Avro generated data objects.  Perhaps automated testing
+of any newly generated schema is a better solution?  We've essentially done that in this
+project and ideas could be refined into something that could live in a CI/CD pipeline.
+At least the author of the change would know that she is creating a breaking change.
 
 ## Serialization Notes
 These tests used the `DataFileWriter` to encode data to disk which worked fine in
