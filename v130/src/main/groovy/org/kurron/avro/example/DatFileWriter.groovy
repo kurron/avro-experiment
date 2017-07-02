@@ -19,9 +19,9 @@ class DatFileWriter {
     static final now = LocalDateTime.now( Clock.fixed( Instant.EPOCH, ZoneId.systemDefault() ) )
     static final date = Math.toIntExact( now.toLocalDate().toEpochDay() )
     static final time = Math.toIntExact( now.toLocalTime().toSecondOfDay() )
-    static final intToLong = Math.toIntExact( now.toLocalDate().toEpochDay() )
-    static final stringToBytes = now.toLocalDate().toString()
-    static final bytesToString = now.toLocalDate().toString().getBytes( 'UTF-8')
+    static final intToLong = Integer.MAX_VALUE
+    static final stringToBytes = LocalDateTime.now().toLocalDate().toString()
+    static final bytesToString = LocalDateTime.now().toLocalDate().toString().getBytes( 'UTF-8')
     public static final String FIRST_NAME = 'firstname-v130'
     public static final String LAST_NAME = 'lastname-v130'
     public static final String USERNAME = 'username-v130'
