@@ -10,6 +10,7 @@
         <option name="modules">
           <set>
             <option value="$PROJECT_DIR$" />
+            <option value="$PROJECT_DIR$/compatibility" />
             <option value="$PROJECT_DIR$/v100" />
             <option value="$PROJECT_DIR$/v110" />
             <option value="$PROJECT_DIR$/v120" />

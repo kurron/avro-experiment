@@ -3,6 +3,9 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/avro-experiment.iml" filepath="$PROJECT_DIR$/.idea/modules/avro-experiment.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/compatibility/compatibility.iml" filepath="$PROJECT_DIR$/.idea/modules/compatibility/compatibility.iml" group="compatibility" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/compatibility/compatibility_main.iml" filepath="$PROJECT_DIR$/.idea/modules/compatibility/compatibility_main.iml" group="compatibility" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/compatibility/compatibility_test.iml" filepath="$PROJECT_DIR$/.idea/modules/compatibility/compatibility_test.iml" group="compatibility" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/v100/v100.iml" filepath="$PROJECT_DIR$/.idea/modules/v100/v100.iml" group="v100" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/v100/v100_main.iml" filepath="$PROJECT_DIR$/.idea/modules/v100/v100_main.iml" group="v100" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/v100/v100_test.iml" filepath="$PROJECT_DIR$/.idea/modules/v100/v100_test.iml" group="v100" />
