@@ -5,10 +5,9 @@ that communicate via message passing.  We'll will simulate the message passing
 by writing messages to disk and having tests reading those files.
 
 One of Avro's strengths is that can handle many forward and backward
-compatibility scenarios.  It can do so because the application and, possibly,
-each message is associated with a schema that allows the Avro runtime to
-make decisions about how to convert a payload into an object that the application
-understands.
+compatibility scenarios.  It can do so because each message is associated
+with a schema that allows the Avro runtime to make decisions about how to
+convert a payload into an object that the application understands.
 
 In our test scenario we will have two applications, one that produces the
 messages and one that consumes them.  Ideally both applications should be
@@ -32,7 +31,7 @@ scenarios:
 | Version 1.2.0 | Version 1.2.0 |                                                                                            |
 | Version 1.2.0 | Version 1.3.0 | Adds complex types, such as arrays, maps and promotable types in a forwards compatible way | 
 | Version 1.3.0 | Version 1.3.0 |                                                                                            |
-| Version 1.3.0 | Version 1.4.0 | Promotes the types, eg int to long in a forwards compatible way                            |
+| Version 1.3.0 | Version 1.4.0 | Promotes the types, eg. int to long in a forwards compatible way                           |
 | Version 2.0.0 | Version 2.0.0 |                                                                                            |
 | Version 1.4.0 | Version 2.0.0 | Removes one field and adds another one in a forwards incompatible way                      | 
 
@@ -42,10 +41,13 @@ breaking and non-breaking changes.
 ## Definitions
 * **Backward Compatibility** - the writer is using a newer schema than the reader 
 * **Forward Compatibility** - the writer is using an older schema than the reader 
+* **Backward Compatibility** - the reader is using an older schema than the writer 
+* **Forward Compatibility** - the reader is using a newer schema than the writer 
  
 # Prerequisites
 
 * [JDK](http://www.oracle.com/technetwork/java/index.html) installed and working
+* [Avro Tools](http://avro.apache.org/releases.html) downloaded into the project directory
 
 # Building
 Use `./gradlew` to execute the [Gradle](https://gradle.org/) build script.
@@ -90,6 +92,23 @@ the v130 test attempts to read the v120 file when testing forwards compatibility
 1. Logical types, including `Date`, `Time` and `Duration` exist.
 1. Batch processing is supported via files.
 1. RPC messaging is also supported.
+
+## Backwards Compatibility Testing
+To be complete, we tested backward compatibility scenarios.  For this experiment, we had to switch away
+from generated, type-safe object and used generic key-value maps instead.
+
+| Producer      | Consumer      | Notes                                                                                      |
+| ------------- | ------------- | ------------------------------------------------------------------------------------------ |
+| Version 1.1.0 | Version 1.0.0 |                                                                                            |  
+| Version 1.2.0 | Version 1.0.0 |                                                                                            |
+| Version 1.2.0 | Version 1.1.0 |                                                                                            |
+| Version 1.3.0 | Version 1.0.0 |                                                                                            |
+| Version 1.3.0 | Version 1.1.0 |                                                                                            |
+| Version 1.3.0 | Version 1.2.0 |                                                                                            |
+| Version 1.4.0 | Version 1.0.0 |                                                                                            |
+| Version 1.4.0 | Version 1.1.0 |                                                                                            |
+| Version 1.4.0 | Version 1.2.0 |                                                                                            |
+| Version 1.4.0 | Version 1.3.0 |                                                                                            |
 
 # Troubleshooting
 
