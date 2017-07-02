@@ -97,18 +97,60 @@ the v130 test attempts to read the v120 file when testing forwards compatibility
 To be complete, we tested backward compatibility scenarios.  For this experiment, we had to switch away
 from generated, type-safe object and used generic key-value maps instead.
 
-| Producer      | Consumer      | Notes                                                                                      |
-| ------------- | ------------- | ------------------------------------------------------------------------------------------ |
-| Version 1.1.0 | Version 1.0.0 |                                                                                            |  
-| Version 1.2.0 | Version 1.0.0 |                                                                                            |
-| Version 1.2.0 | Version 1.1.0 |                                                                                            |
-| Version 1.3.0 | Version 1.0.0 |                                                                                            |
-| Version 1.3.0 | Version 1.1.0 |                                                                                            |
-| Version 1.3.0 | Version 1.2.0 |                                                                                            |
-| Version 1.4.0 | Version 1.0.0 |                                                                                            |
-| Version 1.4.0 | Version 1.1.0 |                                                                                            |
-| Version 1.4.0 | Version 1.2.0 |                                                                                            |
-| Version 1.4.0 | Version 1.3.0 |                                                                                            |
+| Producer      | Consumer      | Notes                                                 |
+| ------------- | ------------- | ------------------------------------------------------|
+| Version 1.1.0 | Version 1.0.0 |                                                       |  
+| Version 1.2.0 | Version 1.0.0 |                                                       |
+| Version 1.2.0 | Version 1.1.0 |                                                       |
+| Version 1.3.0 | Version 1.0.0 |                                                       |
+| Version 1.3.0 | Version 1.1.0 |                                                       |
+| Version 1.3.0 | Version 1.2.0 |                                                       |
+| Version 1.4.0 | Version 1.0.0 |                                                       |
+| Version 1.4.0 | Version 1.1.0 |                                                       |
+| Version 1.4.0 | Version 1.2.0 |                                                       |
+| Version 1.4.0 | Version 1.3.0 | The promotion from int to a long breaks compatibility |
+
+## Self-Describing Data
+Avro's ability to apply schema compatibility rules via the generated code is a real
+time saver. It isn't perfect, however.  As our testing confirmed, there are cases where
+the schema change is too great and Avro is unable to read in the data.  Although complex,
+it is possible to read in the data in a non-type-safe way and "pick" out the desired
+attribute by hand and apply migration rules in your own code.  One way to do this
+is by embedding a reference to the schema with the data. 
+
+```
+{
+   "schema":"s3://kurron-schemas/foo/v100",
+   "data":{
+      "factory":"Factory A",
+      "serialNumber":"EU3571",
+      "status":"RUNNING",
+      "lastStartedAt":1474141826926,
+      "temperature":34.56,
+      "endOfLife":false,
+      "floorNumber":{
+         "int":2
+      }
+   }
+}
+```
+
+The application would consume the JSON and dereference the `schema` attribute and read
+the `data` attribute with that schema.  The AMQP protocol has the `type` header which
+can be used to hold the schema reference to the binary payload, if RabbitMQ messaging
+is being used.  The benefit of perfect deserialization coupled with by-hand migration
+rules must be questioned.  The application must be updated each time an unknown schema
+is encountered.  This is not the case when using Avro generated data objects.  Perhaps
+automated testing of any newly generated schema is a better solution.  We've essentially
+done that in this project and ideas could be refined into something that could live in
+a CI/CD pipeline.
+
+## Serialization Notes
+These tests used the `DataFileWriter` to encode data to disk which worked fine in
+this context but how do we serialize to an in-memory representation?  We need to
+do that if Avro is being used in RabbitMQ or REST payloads.  It was not obvious
+to me how that might be accomplished.  The Avro specification does talk about a
+Protocol Wire Format so something must exist.
 
 # Troubleshooting
 
