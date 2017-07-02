@@ -15,12 +15,6 @@
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/v130/v130.iml" filepath="$PROJECT_DIR$/.idea/modules/v130/v130.iml" group="v130" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/v130/v130_main.iml" filepath="$PROJECT_DIR$/.idea/modules/v130/v130_main.iml" group="v130" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/v130/v130_test.iml" filepath="$PROJECT_DIR$/.idea/modules/v130/v130_test.iml" group="v130" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/v140/v140.iml" filepath="$PROJECT_DIR$/.idea/modules/v140/v140.iml" group="v140" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/v140/v140_main.iml" filepath="$PROJECT_DIR$/.idea/modules/v140/v140_main.iml" group="v140" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/v140/v140_test.iml" filepath="$PROJECT_DIR$/.idea/modules/v140/v140_test.iml" group="v140" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/v200/v200.iml" filepath="$PROJECT_DIR$/.idea/modules/v200/v200.iml" group="v200" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/v200/v200_main.iml" filepath="$PROJECT_DIR$/.idea/modules/v200/v200_main.iml" group="v200" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/v200/v200_test.iml" filepath="$PROJECT_DIR$/.idea/modules/v200/v200_test.iml" group="v200" />
     </modules>
   </component>
 </project>
