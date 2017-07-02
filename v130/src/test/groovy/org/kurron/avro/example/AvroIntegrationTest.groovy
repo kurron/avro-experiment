@@ -7,6 +7,8 @@ import spock.lang.Specification
 
 import java.nio.ByteBuffer
 
+import static org.kurron.avro.example.DatFileWriter.*
+
 /**
  * Exercises Avro codec.
  */
@@ -16,7 +18,7 @@ class AvroIntegrationTest extends Specification {
 
     def 'exercise codec'() {
         given: 'a data file'
-        def dataFile = new File(DatFileWriter.dataFileLocation)
+        def dataFile = new File(DATA_FILE_LOCATION)
 
         when: 'the object is decoded from disk'
         def userDatumReader = new SpecificDatumReader<User>(User)
@@ -24,21 +26,23 @@ class AvroIntegrationTest extends Specification {
         def decoded = dataFileReader.hasNext() ? dataFileReader.next( new User() ) : new User()
 
         then: 'the encoded and decoded match'
-        DatFileWriter.FIRST_NAME == decoded.firstname as String
-        DatFileWriter.LAST_NAME == decoded.lastname as String
-        DatFileWriter.USERNAME == decoded.username as String
-        DatFileWriter.ACTIVE == decoded.active
-        DatFileWriter.ID == decoded.id
-        DatFileWriter.date == decoded.addedDate
-        DatFileWriter.time == decoded.addedTime
-        DatFileWriter.GENDER == decoded.gender
-        DatFileWriter.COMMENT == decoded.comments.first() as String
-        // there is a CharSet to String comparison issue with the keys
-        DatFileWriter.SESSION_VALUE == decoded.sessions[new Utf8( DatFileWriter.SESSION_KEY )]
+        with( decoded ) {
+            FIRST_NAME == firstname as String
+            LAST_NAME == lastname as String
+            USERNAME == username as String
+            ACTIVE == active
+            ID == id
+            DATE == addedDate
+            TIME == addedTime
+            GENDER == gender
+            COMMENT == comments.first() as String
+            // there is a CharSet to String comparison issue with the keys
+            SESSION_VALUE == sessions[new Utf8( SESSION_KEY )]
 
-        DatFileWriter.intToLong == decoded.promotionExample.intToLong
-        DatFileWriter.stringToBytes == decoded.promotionExample.stringToBytes as String
-        ByteBuffer.wrap( DatFileWriter.bytesToString ) == decoded.promotionExample.bytesToString
+            INT_TO_LONG == promotionExample.intToLong
+            STRING_TO_BYTES == promotionExample.stringToBytes as String
+            ByteBuffer.wrap( BYTES_TO_STRING ) == promotionExample.bytesToString
+        }
     }
 
     def 'exercise backwards compatibility'() {
@@ -48,18 +52,20 @@ class AvroIntegrationTest extends Specification {
         def decoded = dataFileReader.hasNext() ? dataFileReader.next( new User() ) : new User()
 
         then: 'the decoded attributes make sense'
-        'firstname-v120' == decoded.firstname as String
-        'lastname-v120' == decoded.lastname as String
-        'username-v120' == decoded.username as String
-        decoded.active
-        0 == decoded.id
-        0 == decoded.addedDate
-        0 == decoded.addedTime
-        Gender.UNDECLARED == decoded.gender
-        [] == decoded.comments
-        [:] == decoded.sessions
-        -1 == decoded.promotionExample.intToLong
-        'defaulted v130 stringToBytes' == decoded.promotionExample.stringToBytes as String
-        ByteBuffer.wrap( 'defaulted v130 bytesToString'.getBytes( 'UTF-8' ) ) == decoded.promotionExample.bytesToString
+        with( decoded ) {
+            'firstname-v120' == firstname as String
+            'lastname-v120' == lastname as String
+            'username-v120' == username as String
+            active
+            0 == id
+            0 == addedDate
+            0 == addedTime
+            Gender.UNDECLARED == gender
+            [] == comments
+            [:] == sessions
+            -1 == promotionExample.intToLong
+            'defaulted v130 stringToBytes' == promotionExample.stringToBytes as String
+            ByteBuffer.wrap( 'defaulted v130 bytesToString'.getBytes( 'UTF-8' ) ) == promotionExample.bytesToString
+        }
     }
 }
