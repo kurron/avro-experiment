@@ -25,7 +25,7 @@ class AvroIntegrationTest extends Specification {
         DatFileWriter.USERNAME == decoded.username as String
     }
 
-    def 'exercise forwards compatibility'() {
+    def 'exercise backwards compatibility'() {
         when: 'an object decoded from disk'
         def userDatumReader = new SpecificDatumReader<User>(User)
         def dataFileReader = new DataFileReader<User>(new File(previousVersionDataFileLocation), userDatumReader)
