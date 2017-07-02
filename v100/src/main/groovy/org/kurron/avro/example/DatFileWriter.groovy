@@ -14,10 +14,8 @@ class DatFileWriter {
     static void main(String[] args) {
 
         def encoded = User.newBuilder().setName(NAME).build()
-
         def datumWriter = new SpecificDatumWriter<User>( User )
         def dataFileWriter = new DataFileWriter<User>( datumWriter )
-
         dataFileWriter.create( encoded.getSchema(), new File( DATA_FILE_LOCATION ) )
         dataFileWriter.append( encoded )
         dataFileWriter.flush()

@@ -9,11 +9,11 @@ import spock.lang.Specification
  */
 class AvroIntegrationTest extends Specification {
 
-    static final previousVersionDataFileLocation = '../v100.bin'
+    static final PREVIOUS_VERSION_DATA_FILE_LOCATION = '../v100.bin'
 
     def 'exercise codec'() {
         given: 'a data file with an object in it'
-        def datafile = new File(DatFileWriter.dataFileLocation)
+        def datafile = new File(DatFileWriter.DATA_FILE_LOCATION)
 
         when: 'the object is decoded from disk'
         def userDatumReader = new SpecificDatumReader<User>(User)
@@ -21,18 +21,22 @@ class AvroIntegrationTest extends Specification {
         def decoded = dataFileReader.hasNext() ? dataFileReader.next( new User() ) : new User()
 
         then: 'the encoded and decoded match'
-        DatFileWriter.NAME == decoded.name as String
-        DatFileWriter.USERNAME == decoded.username as String
+        with( decoded ) {
+            DatFileWriter.NAME == name as String
+            DatFileWriter.USERNAME == username as String
+        }
     }
 
     def 'exercise backwards compatibility'() {
         when: 'an object decoded from disk'
         def userDatumReader = new SpecificDatumReader<User>(User)
-        def dataFileReader = new DataFileReader<User>(new File(previousVersionDataFileLocation), userDatumReader)
+        def dataFileReader = new DataFileReader<User>(new File(PREVIOUS_VERSION_DATA_FILE_LOCATION), userDatumReader)
         def decoded = dataFileReader.hasNext() ? dataFileReader.next( new User() ) : new User()
 
         then: 'the decoded attributes make sense'
-        'name-v100' == decoded.name as String
-        'defaulted v110 username' == decoded.username as String
+        with( decoded ) {
+            'name-v100' == name as String
+            'defaulted v110 username' == username as String
+        }
     }
 }

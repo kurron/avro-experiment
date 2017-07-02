@@ -8,7 +8,7 @@ import org.apache.avro.specific.SpecificDatumWriter
  */
 class DatFileWriter {
 
-    static final dataFileLocation = '../v110.bin'
+    static final DATA_FILE_LOCATION = '../v110.bin'
     public static final String NAME = 'name-v110'
     public static final String USERNAME = 'username-v110'
 
@@ -16,7 +16,7 @@ class DatFileWriter {
         def encoded = User.newBuilder().setName(NAME).setUsername(USERNAME).build()
         def datumWriter = new SpecificDatumWriter<User>( User )
         def dataFileWriter = new DataFileWriter<User>( datumWriter )
-        dataFileWriter.create( encoded.getSchema(), new File( dataFileLocation ) )
+        dataFileWriter.create( encoded.getSchema(), new File( DATA_FILE_LOCATION ) )
         dataFileWriter.append( encoded )
         dataFileWriter.flush()
         dataFileWriter.close()
