@@ -4,6 +4,8 @@ import org.apache.avro.file.DataFileReader
 import org.apache.avro.specific.SpecificDatumReader
 import spock.lang.Specification
 
+import static org.kurron.avro.example.DatFileWriter.NAME
+
 /**
  * Exercises Avro codec.
  */
@@ -21,6 +23,6 @@ class AvroIntegrationTest extends Specification {
         def decoded = dataFileReader.hasNext() ? dataFileReader.next( new User() ) : new User()
 
         then: 'the encoded and decoded match'
-        DatFileWriter.NAME == decoded.name as String
+        NAME == decoded.name as String
     }
 }
