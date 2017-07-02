@@ -2,3 +2,4 @@
 build/
 .idea/workspace.xml
 *.java
+out/
