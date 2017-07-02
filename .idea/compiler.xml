@@ -16,6 +16,8 @@
       <module name="v149_test" target="1.8" />
       <module name="v200_main" target="1.8" />
       <module name="v200_test" target="1.8" />
+      <module name="v_main" target="1.8" />
+      <module name="v_test" target="1.8" />
     </bytecodeTargetLevel>
   </component>
 </project>
