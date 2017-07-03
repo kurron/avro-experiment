@@ -115,7 +115,7 @@ Avro's ability to apply schema compatibility rules via the generated code is a r
 time saver. It isn't perfect, however.  As our testing confirmed, there are cases where
 the schema change is too great and Avro is unable to read in the data.  Although complex,
 it is possible to read in the data in a non-type-safe way and "pick" out the desired
-attribute by hand and apply migration rules in your own code.  One way to do this
+attributes by hand, applying migration rules in your own code.  One way to do this
 is by embedding a reference to the schema with the data. 
 
 ```json
