@@ -1,6 +1,6 @@
 # Overview
 This project is a simple experiment examining the role that
-[Apache Avro](https://avro.apache.org/) in the context of two applications
+[Apache Avro](https://avro.apache.org/) can play in the context of two applications
 that communicate via message passing.  We'll will simulate the message passing
 by writing messages to disk and having tests reading those files.
 
