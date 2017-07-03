@@ -149,9 +149,27 @@ At least the author of the change would know that she is creating a breaking cha
 ## Serialization Notes
 These tests used the `DataFileWriter` to encode data to disk which worked fine in
 this context but how do we serialize to an in-memory representation?  We need to
-do that if Avro is being used in RabbitMQ or REST payloads.  It was not obvious
-to me how that might be accomplished.  The Avro specification does talk about a
-Protocol Wire Format so something must exist.
+do that if Avro is being used in RabbitMQ or REST payloads.  It took me a while
+but I found a technique.
+
+```$groovy
+def schema = new Schema.Parser().parse(DatFileWriter.getResourceAsStream('/schema/user.json'))
+def factory = EncoderFactory.get()
+def stream = new ByteArrayOutputStream()
+def encoder = factory.jsonEncoder( schema, stream, true )
+def writer = new GenericDatumWriter( schema )
+writer.write( encoded, encoder )
+encoder.flush()
+println stream
+```
+
+The above sample encodes the type-safe object into an Avro JSON format.  The
+binary format can by used simply by swapping out the encoder.
+
+```$groovy
+def binaryEncoder = factory.directBinaryEncoder( stream, null )
+def encoder = factory.validatingEncoder( schema, binaryEncoder )
+```
 
 # Troubleshooting
 
