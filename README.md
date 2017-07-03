@@ -59,7 +59,8 @@ Use `./gradlew` to execute the [Gradle](https://gradle.org/) build script.
 ## Jackson's Avro Support
 Initial testing was done using [Jackson's Avro support](https://github.com/FasterXML/jackson-dataformats-binary/tree/master/avro)
 but it was quickly found that it does not support default values which is required
-to maintain forward compatibility.  For that reason, the test code has been removed.
+to maintain forward compatibility.  For that reason, the test code has been removed and
+testing continued using the native Avro library.
 
 ## Avro Code Generation
 The tests were written using Avro's optional code generation facilities.  Although
