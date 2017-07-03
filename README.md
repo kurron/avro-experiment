@@ -118,7 +118,7 @@ it is possible to read in the data in a non-type-safe way and "pick" out the des
 attribute by hand and apply migration rules in your own code.  One way to do this
 is by embedding a reference to the schema with the data. 
 
-```
+```json
 {
    "schema":"s3://kurron-schemas/foo/v100",
    "data":{
@@ -152,13 +152,13 @@ this context but how do we serialize to an in-memory representation?  We need to
 do that if Avro is being used in RabbitMQ or REST payloads.  It took me a while
 but I found a technique.
 
-```$groovy
+```groovy
 def schema = new Schema.Parser().parse(DatFileWriter.getResourceAsStream('/schema/user.json'))
 def factory = EncoderFactory.get()
 def stream = new ByteArrayOutputStream()
 def encoder = factory.jsonEncoder( schema, stream, true )
-def writer = new GenericDatumWriter( schema )
-writer.write( encoded, encoder )
+def writer = new SpecificDatumWriter<User>( User )
+writer.write( user, encoder )
 encoder.flush()
 println stream
 ```
@@ -166,12 +166,44 @@ println stream
 The above sample encodes the type-safe object into an Avro JSON format.  The
 binary format can by used simply by swapping out the encoder.
 
-```$groovy
+```groovy
 def binaryEncoder = factory.directBinaryEncoder( stream, null )
 def encoder = factory.validatingEncoder( schema, binaryEncoder )
 ```
+
+To read an in-memory stream we can do something similar to this:
+
+```groovy
+def decoderFactory = DecoderFactory.get()
+def inputStream = new ByteArrayInputStream( buffer )
+def binaryDecoder = decoderFactory.directBinaryDecoder( inputStream, null )
+def decoder = decoderFactory.validatingDecoder( schema, binaryDecoder )
+def reader = new SpecificDatumReader<User>( schema, schema )
+def user = new User()
+reader.read( user, decoder )
+```
+
+To read from a JSON encoded stream, swap out the decoder:
+
+```groovy
+def jsonDecoder = decoderFactory.jsonDecoder( schema, inputStream )
+def decoder = decoderFactory.validatingDecoder( schema, jsonDecoder )
+```
+
+My experiments show that the application not only has to know that schema that
+was used to write the data but **also the encoding that was used**.  Reading
+binary encoded data using a JSON decoder does not work.  This means that
+a self-describing message must also specify the encoding format as
+well as the writer's schema.
 
 # Troubleshooting
 
 # License and Credits
 This project is licensed under the [Apache License Version 2.0, January 2004](http://www.apache.org/licenses/).
+
+* [Event Streams in Action: Unified log processing with Kafka and Kinesis](https://www.manning.com/books/event-streams-in-action)
+* [Designing Data-Intensive Applications: The Big Ideas Behind Reliable, Scalable, and Maintainable Systems](http://shop.oreilly.com/product/0636920032175.do)
+* [Kafka Streams in Action](https://www.manning.com/books/kafka-streams-in-action)
+* [Streaming Data: Understanding the real-time pipeline](https://www.manning.com/books/streaming-data)
+* [Big Data: Principles and best practices of scalable realtime data systems](https://www.manning.com/books/big-data)
+& [Kafka The Definitive Guide: Real-Time Data and Stream Processing at Scale](http://shop.oreilly.com/product/0636920044123.do)
