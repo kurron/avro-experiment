@@ -206,4 +206,4 @@ This project is licensed under the [Apache License Version 2.0, January 2004](ht
 * [Kafka Streams in Action](https://www.manning.com/books/kafka-streams-in-action)
 * [Streaming Data: Understanding the real-time pipeline](https://www.manning.com/books/streaming-data)
 * [Big Data: Principles and best practices of scalable realtime data systems](https://www.manning.com/books/big-data)
-& [Kafka The Definitive Guide: Real-Time Data and Stream Processing at Scale](http://shop.oreilly.com/product/0636920044123.do)
+* [Kafka The Definitive Guide: Real-Time Data and Stream Processing at Scale](http://shop.oreilly.com/product/0636920044123.do)
