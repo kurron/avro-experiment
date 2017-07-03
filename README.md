@@ -47,17 +47,16 @@ breaking and non-breaking changes.
 # Prerequisites
 
 * [JDK](http://www.oracle.com/technetwork/java/index.html) installed and working
-* [Avro Tools](http://avro.apache.org/releases.html) downloaded into the project directory
 
 # Building
 Use `./gradlew` to execute the [Gradle](https://gradle.org/) build script.
 
 # Installation
-There is noting to install.
+* [Avro Tools](http://avro.apache.org/releases.html) downloaded into the project directory
 
 # Tips and Tricks
 
-## Jackson'S Avro Support
+## Jackson's Avro Support
 Initial testing was done using [Jackson's Avro support](https://github.com/FasterXML/jackson-dataformats-binary/tree/master/avro)
 but it was quickly found that it does not support default values which is required
 to maintain forward compatibility.  For that reason, the test code has been removed.
