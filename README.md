@@ -79,10 +79,9 @@ For example, changing the namespace from `org.kurron.avro.example` to
 `org.kurron.avro.example.v100` would, in Avro's mind, create two separate entities
 and it would not attempt a conversion.
 
-We are counting on Gradle's current behavior of building the modules in the order
-that they are defined in the `settings.gradle` file.  This is required because
-the input of a test is the output file of the previous module.  For example,
-the v130 test attempts to read the v120 file when testing forwards compatibility.
+We are counting on Gradle's current behavior of building the modules in alphabetical
+order.  This is required because the input of a test is the output file of the previous
+module.  For example, the v130 test attempts to read the v120 file when testing forwards compatibility.
 
 ## Interesting Avro Features
 1. You can rename a field via the `aliases` construct.
